@@ -1,0 +1,313 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="container mt-3" id="Message">
+                  {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                      {% for message in messages %}
+                          <div class="alert alert-success mb-3" role="alert" >
+                            {{message}}
+                          </div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endwith %}
+            </div>
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title">Unverified Profiles </h4>
+                  <p class="card-category"><strong>List</strong></p>
+                </div>
+                
+                <div class="card-body">
+                    
+                <br><center>
+                <button class="btn btn-primary" onclick="show('operation1')">Ordinary Users</button>
+                <button class="btn btn-primary  " onclick="show('operation2')">officials</button></center>
+
+   <div id="main_place">
+
+   </div>
+
+            <div id=operation1 style = "display:none;">
+              <table class="table table-striped table-dark">
+                <tr>
+        
+                  <th>Username</th>
+                <th>email</th>
+                <td></td>
+              </tr>
+          
+              
+              {% if ordinary == [] %}
+              <div class="alert alert-danger">
+                <strong>Info!</strong> There are no registered users 
+              </div>
+
+              {% endif %}
+                 
+                        {% for user in ordinary %}
+                        
+                      
+                       
+                        <tr>
+                         <!--- <li class="list-group-item"><a href="Users/{{user.id}}"> -->
+                            
+
+                             <td> {{user.usr_name}}</td> 
+                             <td>{{user.mail}}</td>
+                             <td>
+                              <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit_ord{{user.id}}">view</a>
+                              <button class="btn btn-success">Send Notification Email</button> 
+   
+   
+                          </td>
+   
+                            </tr>
+                            
+                          
+                  <!-- Modal Edit Employee-->
+<div id="modaledit_ord{{user.id}}" class="modal fade"  role="dialog">
+  <div id="coedit_ord{{user.id}}"  style="color: black;">
+  <div class="modal-dialog">
+
+
+     <div class="modal-content">
+
+     
+        <div class="modal-header">
+
+
+           <h4 class="modal-title">User Information</h4>
+
+
+        </div>
+
+
+        <div class="modal-body" >
+
+        
+
+          
+         
+              <div class="form-group">
+               
+
+                 <label  style= "color:#343a40"  >First Name:</label>
+                 <input type="text" readonly   style= "color:#343a40" class="form-control" name="firstname" value="{{user.fname}}" >
+
+
+                <label  style= "color:#343a40">Last Name:</label>
+                <input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
+
+
+                 <label  style= "color:#343a40">Email:</label>
+
+                 <input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+              
+                 <label  style= "color:#343a40">Phone:</label>
+
+                 <input type="text" readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+                 
+                <label  style= "color:#343a40">City:</label>
+                <input type="text" readonly   style= "color:#343a40" class="form-control" name="city" value="{{user.city}}" >
+
+
+             </div>
+
+              <div class="form-group">
+
+
+                <label  style= "color:#343a40"> To check the IDProof, please click the button</label>
+
+               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+                
+
+             </div>
+             <div class="form-group">
+             <a type="submit"  class="btn btn-dark"href="/Admin/user/verify/{{user.usr_name}}/accept" style="margin-right: 5px; background-color:green;" >ACCEPT</a>
+             <a type="submit"  class="btn btn-dark"href="/Admin/user/verify/{{user.usr_name}}/reject" style="margin-right: 5px; background-color:green;" >REJECT</a>
+            </div>
+  
+            
+        </div>
+
+
+        <div class="modal-footer">
+         
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+        </div>
+
+
+     </div>
+
+
+  </div>
+
+</div>
+</div>
+                                                  
+
+                        {% endfor %}
+                      
+              
+
+        </div>        </table></div>
+    
+</div></div>
+
+<div id=operation2 style = "display:none;">
+
+    <table class="table table-striped table-dark">
+      <tr>
+        
+        <th>Username</th>
+        <th>Email</th>
+      <th></th>
+    </tr>
+              {% if authority == [] %}
+              <div class="alert alert-danger">
+                <strong>Info!</strong> There are no registered users 
+              </div>
+
+              {% endif %}
+       
+              {% for user in authority %}
+              
+            
+             
+              <tr>
+               <!--- <li class="list-group-item"><a href="Users/{{user.id}}"> -->
+               
+                   <td> {{user.usr_name}}</td> 
+                   <td>{{user.mail}}</td>
+                  <td><button class="btn btn-warning btn-xs"data-toggle="modal" data-target="#modaledit_auth{{user.id}}"" >View</button>  
+                    <button class="btn btn-success">Send Notification Email</button> 
+                  </td>
+                  </tr>
+                           <!-- Modal Edit Employee-->
+<div id="modaledit_auth{{user.id}}" class="modal fade"  role="dialog">
+  <div id="coedit_ord{{user.id}}"  style="color: black;">
+  <div class="modal-dialog">
+
+
+     <div class="modal-content">
+
+     
+        <div class="modal-header">
+
+
+           <h4 class="modal-title">User Information</h4>
+
+
+        </div>
+
+
+        <div class="modal-body" >
+
+          
+
+          
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40"  >First Name:</label>
+                 <input type="text" readonly   style= "color:#343a40" class="form-control" name="firstname" value="{{user.fname}}" >
+
+
+                <label  style= "color:#343a40">Last Name:</label>
+                <input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
+
+
+                 <label  style= "color:#343a40">Email:</label>
+
+                 <input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+              
+                 <label  style= "color:#343a40">Phone:</label>
+
+                 <input type="text" readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+                 
+                <label  style= "color:#343a40">Job:</label>
+                <input type="text" readonly   style= "color:#343a40" class="form-control" name="job" value="{{user.job}}" >
+
+
+             </div>
+
+              <div class="form-group">
+
+
+                <label  style= "color:#343a40"> To check the IDProof, please click the button</label>
+
+               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+                
+
+             </div>
+
+             <div class="form-group">
+              <a type="submit"  class="btn btn-dark"href="/Admin/user/verify/{{user.usr_name}}/accept" style="margin-right: 5px; background-color:green;" >ACCEPT</a>
+              <a type="submit"  class="btn btn-dark"href="/Admin/user/verify/{{user.usr_name}}/reject" style="margin-right: 5px; background-color:green;" >REJECT</a>
+             </div>
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+        <div class="modal-footer">
+
+           <input type="submit" name="submit"class="btn btn-success"value="Submit"></p>
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+        </div>
+
+
+     </div>
+
+
+  </div>
+
+</div>
+</div>
+                                                  
+
+                        {% endfor %}
+
+</div>        </table></div>
+
+</div></div>
+
+
+<script>
+  function show(param_div_id) {
+    document.getElementById('main_place').innerHTML = document.getElementById(param_div_id).innerHTML;
+  }
+
+  
+    window.setTimeout("document.getElementById('Message').style.display='none';", 6000); 
+
+</script>
+
+
+
+
+
+
+
+{% endblock %}

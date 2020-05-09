@@ -1,0 +1,590 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+      <div class="content">
+        <div class="container-fluid">
+          <div class="card">
+
+            <div class="container mt-3" id="Message">
+              {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category=='success' %}
+                      <div class="alert alert-success mb-3" role="alert" >
+                        {{message}}
+                      </div>
+                    {% endif %}
+                    
+                    {% if category=='error' %}
+                      <div class="alert alert-danger mb-3" role="alert" >
+                        {{message}}
+                      </div>
+                    {% endif %}
+                  
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+        </div>
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">Remove Users</h4>
+              <p class="card-category">Any type of the users can be removed by admin</p></div>
+              <div class="card-body">
+                
+
+
+
+
+                
+                <br>
+                <button class="btn btn-primary" onclick="show('operation1')">List of admins</button>
+                <button class="btn btn-primary" onclick="show('operation2')">List of normal users</button>
+                <button  class="btn btn-primary"onclick="show('operation3')"> List of Third Party</button>
+                <button  class="btn btn-primary" onclick="show('operation4')">List of officials</button>
+                
+                
+          <div id="main_place">
+
+          </div>
+            <div id=operation1 style = "display:none;">
+              <table class="table table-striped table-dark">
+                <tr>
+                  <th>Id</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                <th></th>
+              </tr>
+              
+              
+              {% if admin1 == [] %}
+              <div class="alert alert-danger">
+                <strong>Info!</strong> There are no registered admin users 
+              </div>
+
+              {% endif %}
+                 
+                        {% for user in admin1 %}
+                        
+                      
+                       
+                        <tr>
+                         <!--- <li class="list-group-item"><a href="Users/{{user.id}}"> -->
+                            
+                            <td>{{user.id}}</td>
+                             <td> {{user.usr_name}}</td> 
+                             <td>{{user.mail}}</td>
+                             <td>
+                              <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">view</a>
+                              <a href="/delete/{{user.usr_name}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+   
+   
+                          </td>
+   
+                            </tr>
+                            
+                          
+                  <!-- Modal Edit Employee-->
+<div id="modaledit{{user.id}}" class="modal fade"  role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+
+
+     <div class="modal-content">
+
+     
+        <div class="modal-header">
+
+
+           <h4 class="modal-title">User Information</h4>
+
+
+        </div>
+
+
+        <div class="modal-body" >
+
+
+           <form  method="POST">
+            <div class="form-group">
+
+
+              <label   style= "color:#343a40"  >Admin ID:</label>
+               <input type="hidden"  name="id"  value="{{user.id}}">
+
+              <input type="text" readonly   style= "color:#343a40" class="form-control" name="name" value="{{user.admin_id}}" >
+
+
+           </div>
+          
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40"  >First Name:</label>
+                  <input type="hidden"  name="id"  value="{{user.id}}">
+
+                 <input type="text"  readonly  style= "color:#343a40" class="form-control" name="name" value="{{user.fname}}" >
+
+
+              </div>
+              <div class="form-group">
+
+
+                <label  style= "color:#343a40"  >Last Name:</label>
+                 <input type="hidden"  name="id"  value="{{user.id}}">
+
+                <input type="text"  readonly  style= "color:#343a40" class="form-control" name="name" value="{{user.lname}}" >
+
+
+             </div>
+
+
+
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40">Email:</label>
+
+                 <input type="text" readonly  style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+              </div>
+
+
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40">Phone:</label>
+
+                 <input type="text"  readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+
+              </div>
+
+           </form>
+
+
+        </div>
+
+
+        <div class="modal-footer">
+
+
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+        </div>
+
+
+     </div>
+
+
+  </div>
+
+</div>
+</div>
+                                                  
+
+                        {% endfor %}
+                      
+              
+
+              </table></div>
+
+<div id=operation2 style = "display:none;">
+
+    <table class="table table-striped table-dark">
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+      <th></th>
+    </tr>
+              {% if normal == [] %}
+              <div class="alert alert-danger">
+                <strong>Info!</strong> There are no registered users 
+              </div>
+
+              {% endif %}
+       
+              {% for user in normal %}
+              
+            
+             
+              <tr>
+                  
+                <td>{{user.id}}</td>
+                <td> {{user.usr_name}}</td> 
+                <td>{{user.mail}}</td>
+                <td>
+                 <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#nomodaledit{{user.id}}">view</a>
+                 <a href="/delete/{{user.usr_name}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+
+
+             </td>
+
+               </tr>
+               
+             
+     <!-- Modal Edit Employee-->
+<div id="nomodaledit{{user.id}}" class="modal fade"  role="dialog">
+<div id=co  style="color: black;">
+<div class="modal-dialog">
+
+
+<div class="modal-content">
+
+
+<div class="modal-header">
+
+
+<h4 class="modal-title">User Information</h4>
+
+
+</div>
+
+
+<div class="modal-body" >
+
+
+<form  method="POST">
+
+         
+  <div class="form-group">
+               
+
+    <label  style= "color:#343a40"  >First Name:</label>
+    <input type="text" readonly   style= "color:#343a40" class="form-control" name="firstname" value="{{user.fname}}" >
+
+
+   <label  style= "color:#343a40">Last Name:</label>
+   <input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
+
+
+    <label  style= "color:#343a40">Email:</label>
+
+    <input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+ 
+    <label  style= "color:#343a40">Phone:</label>
+
+    <input type="text" readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+    
+   <label  style= "color:#343a40">City:</label>
+   <input type="text" readonly   style= "color:#343a40" class="form-control" name="city" value="{{user.city}}" >
+
+
+</div>
+
+ <div class="form-group">
+
+
+   <label  style= "color:#343a40"> To see the IDProof, please click the button</label>
+
+  <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+   
+
+</div>
+</form>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</div>
+</div>
+                                     
+
+           {% endfor %}
+         
+ 
+
+     </table></div>
+
+
+<div id=operation3 style= "display:none;">
+
+    <table class="table table-striped table-dark">
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+      <th></th>
+    </tr>
+              {% if third == [] %}
+              <div class="alert alert-danger">
+                <strong>Info!</strong> There is no registered third party users 
+              </div>
+              {% endif %}
+       
+              {% for user in third %}
+              
+            
+             
+              <tr>
+               <!--- <li class="list-group-item"><a href="Users/{{user.id}}"> -->
+                  
+                <td>{{user.id}}</td>
+                             <td> {{user.usr_name}}</td> 
+                             <td>{{user.mail}}</td>
+                             <td>
+                              <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#thmodaledit{{user.id}}">view</a>
+                              <a href="/delete/{{user.usr_name}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+   
+   
+                          </td>
+   
+                            </tr>
+                            
+                          
+                  <!-- Modal Edit Employee-->
+<div id="thmodaledit{{user.id}}" class="modal fade"  role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+
+
+     <div class="modal-content">
+
+     
+        <div class="modal-header">
+
+
+           <h4 class="modal-title">User Information</h4>
+
+
+        </div>
+
+
+        <div class="modal-body" >
+
+
+           <form  method="POST">
+            <div class="form-group">
+
+
+              <label   style= "color:#343a40"  >Third Party ID:</label>
+               <input type="hidden"  name="id"  value="{{user.id}}">
+
+              <input type="text" readonly   style= "color:#343a40" class="form-control" name="name" value="{{user.third_party_id}}" >
+
+
+           </div>
+          
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40"  >Department Name:</label>
+                  <input type="hidden"  name="id"  value="{{user.id}}">
+
+                 <input type="text"  readonly  style= "color:#343a40" class="form-control" name="name" value="{{user.dept}}" >
+
+
+              </div>
+              <div class="form-group">
+
+
+                <label  style= "color:#343a40"  >Name and city:</label>
+                 <input type="hidden"  name="id"  value="{{user.id}}">
+
+                <input type="text"  readonly  style= "color:#343a40" class="form-control" name="name" value="{{user.name}}" >
+
+
+             </div>
+
+
+
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40">Email:</label>
+
+                 <input type="text" readonly  style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+              </div>
+
+
+              <div class="form-group">
+
+
+                 <label  style= "color:#343a40">Phone:</label>
+
+                 <input type="text"  readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+
+              </div>
+
+           </form>
+
+
+        </div>
+
+
+        <div class="modal-footer">
+
+
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+        </div>
+
+
+     </div>
+
+
+  </div>
+
+</div>
+</div>
+                                                  
+
+                        {% endfor %}
+                      
+              
+
+              </table></div>
+
+
+<div id=operation4 style = "display:none;">
+  <table class="table table-striped table-dark">
+    <tr>
+      <th>Id</th>
+      <th>Username</th>
+      <th>Email</th>
+    <th></th>
+  </tr>
+        
+          {% if officials == [] %}
+          <div class="alert alert-danger">
+            <strong>Info!</strong> There is  no registered official users 
+          </div>
+    
+         {% endif %}
+     
+            {% for user in officials %}
+          <tr>  
+            <td>{{user.id}}</td>
+            <td> {{user.usr_name}}</td> 
+            <td>{{user.mail}}</td>
+            <td>
+             <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#ofmodaledit{{user.id}}">view</a>
+             <a href="/delete/{{user.usr_name}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+
+
+         </td>
+
+           </tr>
+           
+         
+ <!-- Modal Edit Employee-->
+<div id="ofmodaledit{{user.id}}" class="modal fade"  role="dialog">
+<div id=co  style="color: black;">
+<div class="modal-dialog">
+
+
+<div class="modal-content">
+
+
+<div class="modal-header">
+
+
+<h4 class="modal-title">User Information</h4>
+
+
+</div>
+
+
+<div class="modal-body" >
+
+
+<form  method="POST">
+
+     
+<div class="form-group">
+           
+
+<label  style= "color:#343a40"  >First Name:</label>
+<input type="text" readonly   style= "color:#343a40" class="form-control" name="firstname" value="{{user.fname}}" >
+
+
+<label  style= "color:#343a40">Last Name:</label>
+<input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
+
+
+<label  style= "color:#343a40">Email:</label>
+
+<input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
+
+
+
+<label  style= "color:#343a40">Phone:</label>
+
+<input type="text" readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">
+
+
+<label  style= "color:#343a40">job profile:</label>
+<input type="text" readonly   style= "color:#343a40" class="form-control" name="city" value="{{user.job}}" >
+
+
+</div>
+
+<div class="form-group">
+
+
+<label  style= "color:#343a40"> To see the JobProof, please click the button</label>
+
+<a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+
+
+</div>
+</form>
+
+
+</div>
+
+
+
+<div class="modal-footer">
+
+
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</div>
+</div>
+                                         
+
+               {% endfor %}
+             
+     
+
+        </table></div>
+
+</div></div>   
+           </div> 
+<script>
+  function show(param_div_id) {
+    document.getElementById('main_place').innerHTML = document.getElementById(param_div_id).innerHTML;
+  }
+
+  
+    window.setTimeout("document.getElementById('Message').style.display='none';", 6000); 
+
+</script>
+
+{% endblock %}

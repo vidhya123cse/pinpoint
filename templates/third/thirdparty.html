@@ -1,0 +1,362 @@
+
+{% extends 'third/base.html' %}
+
+{% block body %} 
+
+<div class="container mt-3" id="Message">
+  {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+               
+           {% for category, message in messages %}
+                {% if category == 'success1' %}
+          <div id ="message1" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+            {{message}} <br>
+          </div>
+          <script>
+            window.setTimeout("document.getElementById('message1').style.display='none';",5000);
+          
+          </script>
+        {% endif %}
+
+        {% if category == 'success' %}
+        <div id ="message2" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message2').style.display='none';",5000);
+        
+        </script>
+      {% endif %}
+
+      
+
+
+        {% if category == 'mass' %}
+        <center>
+          <div id ="message3" class="alert alert-info mb-3" style="max-width: 700px;" role="alert">
+            {{message}} <br>
+          </div>
+          <script>
+            window.setTimeout("document.getElementById('message3').style.display='none';",5000);
+          
+          </script>
+          </center>
+        {% endif %}
+        
+        {% if category =='errorvideo' %}
+        <div id ="message4" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message4').style.display='none';",5000);
+        
+        </script>
+      {% endif %}
+
+      {% if category =='errorimage' %}
+        <div id ="message5" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message5').style.display='none';",5000);
+        
+        </script>
+      {% endif %}
+
+
+      {% if category =='errornumber' %}
+        <div id ="message6" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+      {% endif %}
+      
+
+      {% if category =='errorface' %}
+        <div id ="message7" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message7').style.display='none';",5000);
+        
+        </script>
+      {% endif %}
+
+
+      {% if category =='errorcamera' %}
+        <div id ="message8" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message8').style.display='none';",5000);
+        
+        </script>
+      {% endif %}
+
+
+        {% if category =='success2' %}
+          <div id ="message9" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+            {{message}} <br>
+         </div>
+         <script>
+          window.setTimeout("document.getElementById('message9').style.display='none';",5000);
+        
+        </script>
+        {% endif %}
+        
+
+        {% if category =='success3' %}
+        <div id ="message10" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+          {{message}} <br>
+       </div>
+       <script>
+        window.setTimeout("document.getElementById('message10').style.display='none';",5000);
+      
+      </script>
+      {% endif %}
+         
+
+        
+        {% if category =='error' %}
+          <div id ="message11" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert" >
+            {{message}}
+          </div>
+          <script>
+            window.setTimeout("document.getElementById('message11').style.display='none';",5000);
+          
+          </script>
+        {% endif %}
+      
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+<div class="content" id = "pending" style="display:none;">
+  <div class="container-fluid">
+    <div class="card">
+
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">Pending Request from Users</h4>
+        <p class="card-category"></p></div>
+        <div class="card-body">
+  
+        
+ 
+    {% if value =='None' %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+               
+           {% for category, message in messages %}
+                {% if category == 'None' %}
+        <div  class="alert alert-danger mb-3" role="alert" id="message" style="height: 50px;" >
+          {{message}}
+        </div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  
+
+{% elif value == 'success' %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+               
+           {% for category, message in messages %}
+                {% if category == 'success5' %}
+    <div class="alert alert-success mb-3" id="message" role="alert" >
+     {{message}}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+          
+
+      <div id="operation1" >
+        <table class="table table-hover table-dark">
+          <tr>
+            <th>Id</th>
+            <th>Username</th>
+           
+          <th></th>
+        </tr>
+
+
+{% for user in all %}
+
+              <tr>
+                      
+                      <td>{{ user.id }} </td>
+                       <td> {{ user.usr_name }}</td> 
+                       <td>
+                        <button href="" id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">view</button>
+                      
+
+
+                  
+
+                      </tr>
+    
+            <!-- Modal Edit user-->
+
+<div id="modaledit{{user.id}}" class="modal fade"  role="dialog">
+<div id="co"  style="color: black;">
+<div class="modal-dialog">
+
+
+<div class="modal-content">
+
+
+  <div class="modal-header">
+
+
+     <h4 class="modal-title">Request Information</h4>
+
+
+  </div>
+  <form action="/thirdparty/pendinguser" method="POST" enctype="multipart/form-data">
+
+  <div class="modal-body" >
+
+
+     
+
+    
+        <div class="form-group">
+
+
+           <label  style= "color:#343a40"  >Date: {{ user.date }} </label>
+            
+        </div>
+
+
+
+        <div class="form-group">
+
+
+           <label  style= "color:#343a40">Start Time: {{ user.start_time }}</label>
+            <br>
+           <label  style= "color:#343a40">End Time: {{ user.end_time }}</label>
+
+
+        </div>
+
+
+       
+ 
+        <input type="file" style= "color:#343a40" class="form-control" name="video" accept = ".mp4"/>
+        <input type="hidden" value="{{ user.usr_name }}" name="username">
+        <input type="hidden" value="{{ user.id }}" name="userid">
+        <div class="form-group">
+          <label  style= "color:#343a40">Enter Your Response:</label>
+          <input type ="text" name="response" style= "color:#343a40" class="form-control" placeholder="Enter Your Feedback" required/>
+        </div> 
+
+
+  <div class="modal-footer">
+
+    <button type="submit" class="btn btn-success" value="accept" name = "accept" >Accept</button>
+     <button type="submit" class="btn btn-danger" value="reject" name="accept">Reject</button>
+     <button type="button" id = "close" class="btn btn-secondary" data-dismiss="modal">close</button>
+  </div>
+  </div>
+  </div>
+  </form>
+  </div>
+</div>
+ </div>   
+ {% endfor %}
+</table>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+  </div>
+
+
+
+<div  id="liverecord" style="display: none;">
+
+  <!-- Navbar -->
+
+  <div class="content">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Realtime Video Processing</h4>
+          <p class="card-category"> Maximum 2 images can be input. Video is taken as realtime</p>
+        </div>
+        <div class="card-body">
+         <br><center>
+            
+             <!-- <div class="col-md-8" id ="mass" style="background-color: lightblue;"></div> -->
+           
+            <br>
+             
+              <form class="md-form" method="POST" action="/thirdparty/realtimevideo" enctype="multipart/form-data">
+                <div class="file-field">
+                  <div class="btn btn-primary float-centre" >
+                    <span>Choose file</span>
+                    <input type="file"  id ="livefile" name="livefile" accept=".jpg,.jpeg" multiple required>
+                  </div>
+                  <br><br><div class="text-center">
+                  <button type="submit" name="subm" value="submit" class="btn btn-primary" style="background-color:#2dc997;"> Start Realtime Video Processing</button>
+               <button type="reset" class="btn btn-danger" > Reset The Field 
+                        </button>  <br><br></div>
+                      </div>
+             
+              </form>
+              </div>
+            </center>     
+              
+
+</div></div></div></div>
+   
+
+<div  id="updatediv"style="display: none;" >
+
+  <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
+<h2 style="text-align: center;font-weight: bold;"id ="login">UPDATE PASSWORD </h2>
+<center>
+
+<div class="container"> 
+<form action="" id ="update" method ="POST">
+<div class="col-xs-12 col-sm-6 col-md-9"> 
+<br>
+<div class="form-group">
+  <input class="form-control" style="color: black;" type="password" placeholder="Enter the current Password" id ="psw1" name="psw1"  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+</div>
+
+<div class="form-group">
+  <input class="form-control" style="color: black;" type="password" placeholder="Enter the new Password" id ="psw2" name="psw2"  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+</div>
+<div class="form-group">
+  <input class="form-control" style="color: black;" type="password" placeholder="Re-type the new Password" id ="psw3" name="psw3  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+</div>
+
+<button class="btn btn-primary" type="submit" id="updatepassword" style="background-color:#2dc997;" >Update</button><br>
+<br>
+</div>
+</form>
+</div>
+</center> 
+</div>
+</div>
+      
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+     

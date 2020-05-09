@@ -1,0 +1,844 @@
+{% extends 'base/base.html' %}
+
+{% block script %} 
+<script defer src="{{ url_for('static',filename = 'js/current.js')}}"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script defer src="{{ url_for('static',filename = 'js/state.js')}}"></script>
+
+
+
+<script>
+
+function animation()
+{
+
+  var textWrapper = document.querySelector('.ml2');
+  textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+  anime.timeline({loop: true})
+  .add({
+  targets: '.ml2 .letter',
+  scale: [4,1],
+  opacity: [0,1],
+  translateZ: 0,
+  easing: "easeOutExpo",
+  duration: 950,
+  delay: (el, i) => 70*i
+  }).add({
+  targets: '.ml2',
+  opacity: 0,
+  duration: 1000,
+  easing: "easeOutExpo",
+  delay: 1000
+  });var textWrapper = document.querySelector('.ml2');    
+  textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+  anime.timeline({loop: true})
+  .add({
+  targets: '.ml2 .letter',
+  scale: [4,1],
+  opacity: [0,1],
+  translateZ: 0,
+  easing: "easeOutExpo",
+  duration: 950,
+  delay: (el, i) => 70*i
+  }).add({
+  targets: '.ml2',
+  opacity: 0,
+  duration: 1000,
+  easing: "easeOutExpo",
+  delay: 1000
+  });
+
+
+}
+
+
+function processing()
+{
+  if(document.getElementById("fileupload").checkValidity() && document.getElementById("videobutton").checkValidity())
+  {
+  document.getElementById("curent").style.display = 'none'
+  document.getElementById("loading").style.display = 'block'
+  animation()
+  document.getElementById("videocheck").submit()
+  }
+
+}
+
+function processingthird()
+{
+  if(document.getElementById("fileupload").checkValidity() && document.getElementById("secondList").checkValidity() 
+  && document.getElementById("date").checkValidity() && document.getElementById("starttime").checkValidity()
+  && document.getElementById("endtime").checkValidity())
+  {
+  document.getElementById("curent").style.display = 'none'
+  document.getElementById("loading").style.display = 'block'
+  animation()
+  document.getElementById("videocheck").submit()
+  }
+
+}
+
+
+function liveprocessing()
+{
+  if(document.getElementById("fileupload").checkValidity())
+  {
+  document.getElementById("curent").style.display = 'none'
+  document.getElementById("loading").style.display = 'block'
+  animation()
+  document.getElementById("videocheck").submit()
+  }
+
+}
+
+
+function Updateusername()
+{
+
+  $("#curent").hide();
+  $("#editprofile").hide();
+  $("#updatepassword").hide();
+  $("#deleteaccount").hide();
+  $("#notification").hide();
+  document.getElementById("updateusername").style.display = 'block';
+  $("#updateusername").show();
+
+
+
+}
+
+
+
+function Updatepassword()
+{
+  
+  $("#curent").hide();
+  $("#editprofile").hide();
+  $("#updateusername").hide();
+  $("#deleteaccount").hide();
+  $("#notification").hide();
+  document.getElementById("updatepassword").style.display = 'block';
+  $("#updatepassword").show();
+
+
+}
+
+
+function DeleteAccount()
+{
+
+  $("#curent").hide();
+  $("#updatepassword").hide();
+  $("#updateusername").hide();
+  $("#editprofile").hide();
+  $("#notification").hide();
+  document.getElementById("deleteaccount").style.display = 'block';
+  $("#deleteaccount").show();
+}
+
+
+function Notifications()
+{
+  $("#curent").hide();
+  $("#updatepassword").hide();
+  $("#updateusername").hide();
+  $("#editprofile").hide();
+  $("#deleteaccount").hide();
+  document.getElementById("notification").style.display = 'block';
+  $("#notification").show();
+}
+
+
+function Updateprofile()
+{
+
+  $("#curent").hide();
+  $("#updatepassword").hide();
+  $("#updateusername").hide();
+  $("#deleteaccount").hide();
+  $("#notification").hide();
+  document.getElementById("editprofile").style.display = 'block';
+  $("#editprofile").show();
+
+}
+
+function EditOrdPro()
+{
+
+  var state = `
+  
+  <div class="col-xs-12 col-sm-6 form-group">
+			<label><b>State &nbsp;<span style="color: red;">*</span></b></label>
+			<select id="firstlist" onclick="selct_district(this.value)" name="state" class="form-control">
+			<option value ="">--Select State--</option>
+			<option value ="Andhra Pradesh">Andhra Pradesh</option>
+			<option value ="Arunachal Pradesh">Arunachal Pradesh</option>
+			<option value ="Assam">Assam</option>
+			<option value ="Bihar">Bihar</option>
+			<option value ="Chhattisgarh">Chhattisgarh</option>
+			<option value ="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+			<option value ="Daman and Diu">Daman and Diu</option>
+			<option value ="Delhi">Delhi</option>
+			<option value ="Goa">Goa</option>
+			<option value ="Gujarat">Gujarat</option>
+			<option value ="Haryana">Haryana</option>
+			<option value ="Himachal Pradesh">Himachal Pradesh</option>
+			<option value ="Jammu and Kashmir">Jammu and Kashmir</option>
+			<option value ="Jharkhand">Jharkhand</option>
+			<option value ="Karnataka">Karnataka</option>
+			<option value ="Kerala">Kerala</option>
+			<option value ="Madhya Pradesh">Madhya Pradesh</option>
+			<option value ="Maharashtra">Maharashtra</option>
+			<option value ="Manipur">Manipur</option>
+			<option value ="Meghalaya">Meghalaya</option>
+			<option value ="Mizoram">Mizoram</option>
+			<option value ="Nagaland">Nagaland</option>
+			<option value ="Orissa">Orissa</option>
+			<option value ="Puducherry">Puducherry</option>
+			<option value ="Punjab">Punjab</option>
+			<option value ="Rajasthan">Rajasthan</option>
+			<option value ="Sikkim">Sikkim</option>
+			<option value ="Tamil Nadu">Tamil Nadu</option>
+			<option value ="Telangana">Telangana</option>
+			<option value ="Tripura">Tripura</option>
+			<option value ="Uttar Pradesh">Uttar Pradesh</option>
+			<option value ="Uttarakhand">Uttarakhand</option>
+			<option value ="West Bengal">West Bengal</option>
+			</select>
+			</div>	
+		
+
+  
+  `;
+
+  var city = `
+  <div class="col-xs-12 col-sm-6 form-group">
+			<label><b>City &nbsp;<span style="color: red;">*</span></b></label>
+			<select id='secondlist' name="city" class="form-control" >
+			<option value="">--Select City--</option>
+			</select>
+  `
+
+
+
+
+
+  document.getElementById("fname").readOnly = false;
+  document.getElementById("lname").readOnly = false;
+  document.getElementById("mobile").readOnly = false;
+  document.getElementById("email").readOnly = false;
+  document.getElementById("zip").readOnly = false;
+  document.getElementById("address").readOnly = false;
+
+  document.getElementById("fname").required = true;
+  document.getElementById("lname").required = true;
+  document.getElementById("mobile").required = true;
+  document.getElementById("email").required = true;
+  document.getElementById("zip").required = true;
+  document.getElementById("address").required = true;
+
+  document.getElementById("save").disabled = false;
+  
+  document.getElementById("message").style.display = "block";
+  window.setTimeout("document.getElementById('message').style.display='none';",5000);
+
+
+  $("#statediv").replaceWith(state)
+  $("#citydiv").replaceWith(city)
+
+  
+}
+
+
+
+function EditAuthoPro()
+{
+
+var job = 
+`
+<div class="col-xs-12 col-sm-6 form-group">
+						<label for="job">Job Title:</label>&nbsp;
+
+						<select id="job" name="job" onclick="showfield(this.value)">
+						  <option class="dropdown-item" value="">--select option--</option>
+						  <option class="dropdown-item" value="Police">Police Force</option>
+						  <option class="dropdown-item" value="RPF">RPF</option>
+						  <option class="dropdown-item" value="Other">Other</option>
+						
+						</select>
+            </div>
+            <div class="col-xs-12 col-sm-6 form-group">
+					  
+            <input style="display:none;" type="text" class="form-control" placeholder='input department' id='dep' name='department'>
+         
+            </div>
+
+`
+
+
+  document.getElementById("Afname").readOnly = false;
+  document.getElementById("Alname").readOnly = false;
+  document.getElementById("Amobile").readOnly = false;
+  document.getElementById("Aemail").readOnly = false;
+
+
+  document.getElementById("Afname").required = true;
+  document.getElementById("Alname").required = true;
+  document.getElementById("Amobile").required = true;
+  document.getElementById("Aemail").required = true;
+
+  document.getElementById("save").disabled = false;
+
+  document.getElementById("message").style.display = "block";
+  window.setTimeout("document.getElementById('message').style.display='none';",5000);
+
+
+  $("#jobdiv").replaceWith(job)
+
+}
+
+
+
+var check = function() {
+	if (document.getElementById('psw2').value ==
+	  document.getElementById('psw3').value) {
+	  document.getElementById('message').style.color = 'green';
+	  document.getElementById('message').innerHTML = 'matching';
+	} else {
+	  document.getElementById('message').style.color = 'red';
+	  document.getElementById('message').innerHTML = 'not matching';
+	}
+  }
+
+
+
+
+  var check2 = function() {
+	if (document.getElementById('user2').value ==
+	  document.getElementById('user3').value) {
+	  document.getElementById('message2').style.color = 'green';
+	  document.getElementById('message2').innerHTML = 'matching';
+	} else {
+	  document.getElementById('message2').style.color = 'red';
+	  document.getElementById('message2').innerHTML = 'not matching';
+	}
+  }
+
+
+
+function showfield(name)
+{
+    if(name=='Other'){
+		document.getElementById('dep').style.display="block";
+		document.getElementById("dep").required = true;
+	}
+    else{ 
+		document.getElementById('dep').style.display="none";
+		document.getElementById("dep").required = false;
+	}
+}
+
+
+$(function () {
+  $('#updatepsw').click(function () {
+    var pass = $('#psw2').val();
+    var conf = $('#psw3').val();
+    if (pass != conf) {
+      alert("Password do not match");
+      return false;
+    }
+    return true;
+  });
+});
+
+
+
+function hidepreview()
+{
+
+  $("#dvPreview").hide();
+}
+
+</script>
+
+{% endblock %}
+
+{% block style %} 
+<link href="{{ url_for('static',filename = 'css/current.css')}}" rel="stylesheet">
+<style>
+  
+
+
+</style>
+{% endblock %}
+
+
+{% block navbar %}
+      <nav id="nav-menu-container">
+        <ul class="nav-menu pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret">Hi,&nbsp;{{user}} {% if notifi != None %} &nbsp;<b style="color: red;"> (1)</b> {% endif %}</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#editprofile" onclick="Updateprofile()">Edit Profile</a>
+              </li>
+              <li><a href="#updatepassword" onclick="Updatepassword()">Change Password</a>
+              </li>
+              <li><a href="#notification" onclick="Notifications()">Notification{% if notifi != None %} &nbsp;<b style="color: red;">(1)</b> {% endif %} </a>
+              </li>
+              <li><a href="#updateusername" onclick="Updateusername()">Change Username</a>
+              </li>
+              <li><a href="/logout">Logout</a>
+              </li>
+              <li><a href="#deleteaccount"onclick="DeleteAccount()">Delete Account</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+{% endblock %}
+
+      {% block body %} 
+
+
+      <div class="container" id="curent" style="margin-top: 100px;border-color:#2dc997; border-radius: 10px; margin-bottom: 30px; border-style: solid; max-width: 90%; min-width: 300px;">
+      <form action="/user/upload" method="POST" enctype="multipart/form-data" id="videocheck" >
+        
+          
+          {% with messages = get_flashed_messages(with_categories=True) %}
+               {% if messages %}
+               
+                {% for category, message in messages %}
+                {% if category == 'success' %}
+                <div id="message" class="alert alert-success alert-dismissible fade show" style="max-width: 600px;">
+                  <strong>Success!</strong> {{ message }}
+              </div>
+              {% endif %}
+
+              {% if category == 'mass' %}
+              <center>
+              <div id="message" class="alert alert-info alert-dismissible fade show" style="max-width: 600px;">
+                <strong>Success!</strong> {{ message }}
+            </div>
+            </center>
+            {% endif %}
+
+              {% if category == 'error' %}
+
+              <div  id="message" class="alert alert-danger alert-dismissible fade show" style="max-width: 600px;">
+                <strong>Error!</strong> {{ message }}
+            </div>
+
+              {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          
+
+              <div class="row">
+                <label class="control-label"></label>
+                      <div style="margin: 20px;"><b>Upload File</b></div>
+                    </div>
+                    <div class="box-body" id = "review" style="margin: 30px;">
+                
+                    <i class="glyphicon glyphicon-download-alt"></i>
+                    <p>Choose  Image files or drag it here(max Two Images).</p>
+                  </div>
+                  <div class="row">
+                  <div style="margin: 30px;">
+                    <label class="custom-file">
+                      <input type="file" class="custom-file-input" id ="fileupload" name="file" accept=".jpg,.jpeg" multiple required>
+                      <span class="custom-file-label" for="customFile">Choose file</span>
+                    </label>
+                  
+                  </div>
+              <div id="dvPreview"></div>
+              <button type="reset" class="btn btn-danger pull-left" style="max-width: 200px;max-height: 40px; margin-left: 25px; margin-bottom: 10px;" onclick="hidepreview();"> Reset The Field
+            </button></div>
+          <div class="row col-md-4 col-xs-12 col-sm-6 col-md-9">
+            
+            <button type="button" id = "up1" class="btn btn-primary pull-left"style="max-width: 200px; margin: 10px;background-color:#2dc997;" onclick="video()"href="#video" >Upload Input Video</button>
+            <button type="button" id = "up2"  class="btn btn-primary pull-left" style="max-width: 200px; margin: 10px;background-color:#2dc997;" onclick="third()" href="#third">Upload Info About Video</button>
+            <button type="button" id = "up3"  class="btn btn-primary pull-left" style="max-width: 200px; margin: 10px;background-color:#2dc997;" onclick="live()" href="#live">Live Video</button>
+            
+          </div>
+            <div id = "video">
+            </div>
+            <div id = "third" style="display: none;">
+              {% if third == "third" %}
+              <br>
+           <div class="alert alert-danger alert-dismissible fade show" style="max-width: 50%;">
+             <strong>Error!</strong> No Department Or Location for Requesting Video
+           </div>
+           
+          {% endif %}
+              <centre>
+                <div class="col-md-4" id ="mass">
+                <div style="margin: 20px;"><b>Department</b></div>
+                <div class ="row col-md-4 col-xs-12 col-sm-6 col-md-9">
+                <select class="custom-select"  id='firstList' name='firstList' onclick="getauth(this.value)" >
+                <option class="dropdown-item" value="">--Select--</option>
+                {% for al in all %}
+                              <option class="dropdown-item" value="{{all.index(al)}}">{{al[0]}}</option>
+                {% endfor %}
+                              
+                </select>
+                
+                <div  style="margin: 20px;"><b>Locate here</b></div>
+                {% for am in a %} 
+                
+                <select class="custom-select" style="display: none;" id = "{{a.index(am)}}" name='secondList{{a.index(am)}}'>
+                <option class="dropdown-item" value="">--Select--</option>
+                {% for ah in am %}
+                <option class="dropdown-item" value="{{ah.name}}">{{ah.name}}</option>
+                {% endfor %}
+                </select>
+                
+                {% endfor %}
+                </div>
+                
+                <br>
+                
+                
+                  
+                <div style="margin: 20px;"><b>Date</b></div>
+                    <div class="col-10"style="margin-bottom:10px;">
+                      <input class="form-control" name="date" type="date" id="date">
+                    </div>
+                  <div class="row">
+                  <div class="col-10" style="margin-bottom:10px;">
+                  <div style="margin: 20px;"><b>Start Time</b></div>
+                    <input class="form-control" name="starttime" type="time" value="" id="starttime">
+                  </div> <br>
+                  <div class="col-10">
+                  <div style="margin: 20px;"><b>End Time</b></div>
+                  <input class="form-control" name = "endtime" type="time" value="" id="endtime" >          
+                </div>
+                </div><br>
+                
+                
+                
+                <div class ="row col-md-4 col-xs-12 col-sm-6 col-md-9">
+                <input type="submit" name="action" value = "Request_Video" class="btn btn-primary pull-left" style="min-width:200px;max-width: 300px;margin-left: 10px; background-color:#2dc997; margin-bottom: 10px;" onclick="processingthird();" />
+                <button type="button" class="btn btn-danger pull-left" style="min-width:200px;max-width: 200px;margin-left: 10px; margin-bottom: 10px;" onclick="resetthird()"> Reset The Field
+                          </button>
+                        </div>
+                 <br><br><br>
+                </div>
+                
+                <br><br>
+                </centre>
+                
+
+
+            </div>
+            <div id = "live">
+            </div>
+      
+      </form>
+    </div>
+    <div id = "loading" style="display:none;margin-top: 10%;margin-bottom:16%;">
+
+    <h1 class="ml2"> <i> Processing...Please wait...</i></h1>
+
+    <div class="loader">
+      <div class="holder">
+          <div class="box"></div>
+      </div>
+      <div class="holder">
+          <div class="box"></div>
+      </div>
+      <div class="holder">
+          <div class="box"></div>
+      </div>
+  </div>
+  </div>
+  
+  
+
+
+
+
+
+  <div  id="updateusername"style="display: none;" >
+
+    <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+  border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
+  <h2 style="text-align: center;font-weight: bold;"id ="login">UPDATE USERNAME </h2>
+  <center>
+  
+  <div class="container"> 
+  <form action="/user/update/username" id ="update" method ="POST">
+  <div class="col-xs-12 col-sm-6 col-md-9"> 
+  <br>
+  <div class="form-group">
+    <input class="form-control" style="color: black;" type="text" placeholder="Enter the current Username" id ="user1" name="username1" required >
+  </div>
+  
+  <div class="form-group">
+    <input class="form-control" style="color: black;" onkeyup="check2();" type="text" placeholder="Enter the new Username" id ="user2" name="username2"  required >
+  </div>
+  <div class="form-group">
+    <input class="form-control" style="color: black;" onkeyup="check2();" type="text" placeholder="Re-type the new Username" id ="user3" name="username3"   required >
+    <span id='message2'></span>
+  </div>
+  
+  <button class="btn btn-primary" type="submit" id="updateusername" style="background-color:#2dc997;max-width: 90px;" ><b>UPDATE</b></button>
+  <a href="/user/current"class="btn btn-danger" type="submit"><b>BACK</b></a>
+  <br>
+  </div>
+  </form>
+  </div>
+  </center> 
+  </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div  id="updatepassword"style="display: none;" >
+
+    <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+  border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
+  <h2 style="text-align: center;font-weight: bold;"id ="login">UPDATE PASSWORD </h2>
+  <center>
+  
+  <div class="container"> 
+  <form action="/user/update/password" id ="passwordup" method ="POST">
+  <div class="col-xs-12 col-sm-6 col-md-9"> 
+  <br>
+  <div class="form-group">
+    <input class="form-control" style="color: black;" type="password" placeholder="Enter the current Password" id ="psw1" name="psw1"  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+  </div>
+  
+  <div class="form-group">
+    <input class="form-control" style="color: black;" onkeyup="check();" type="password" placeholder="Enter the new Password" id ="psw2" name="psw2"  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+  </div>
+  <div class="form-group">
+    <input class="form-control" style="color: black;" onkeyup="check();" type="password" placeholder="Re-type the new Password" id ="psw3" name="psw3"  pattern="[0-9a-zA-Z].{8,}" maxlength="12" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+    <span id='message'></span>
+  </div>
+  
+  <button class="btn btn-primary" type="submit" id="updatepsw" style="background-color:#2dc997;max-width: 90px;" ><b>UPDATE</b></button>
+  <a href="/user/current"class="btn btn-danger" type="submit"><b>BACK</b></a>
+  <br>
+  </div>
+  </form>
+  </div>
+  </center> 
+  </div>
+  </div>
+    
+    <!---->
+
+
+    <div  id="notification"style="display: none;" >
+
+      {% if notifi != None %}
+      <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+    border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
+
+    <h2 style="text-align: center;font-weight: bold;"id ="login">RESULT VIDEO </h2>
+    <center>
+      <br>
+      <label>Output : &nbsp; Found </label>
+      <br>
+      <label>Time Spotted &nbsp;:&nbsp;</label>
+      <br>
+      <br>
+      <p>Click on the icon to view the Output video:<p>
+        <a href="/user/Processed/result/{{user}}.mp4"  target="_blank">
+            <img src="{{url_for('static', filename='img/download.png')}}" width="50" height="75" align="middle" />
+        </a>
+        <br><br>
+        <a href="/user/current"class="btn btn-danger" type="submit"><b>BACK</b></a>
+       
+
+
+    </center>
+
+    </div>
+    {% endif %}
+
+    {% if notifi == None %}
+    <center>
+    <div  id="message" class="alert alert-warning alert-dismissible fade show" style="max-width: 500px;margin-top: 100px;margin-bottom: 300px;">
+      <strong>Warning!</strong> You don't have any notification <br>
+  <br><br>
+     <center>Click to &nbsp; <a href="/user/current"class="btn btn-primary" type="submit"><b>Redirect</b></a></center>
+  </div>
+</center>
+    {% endif %}
+    </div>
+
+
+
+
+
+    <div  id="deleteaccount"style="display: none;" >
+
+      <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; max-width: 800px;">
+    <form action="/user/deleteaccount" method="POST"  >
+     
+      <div class="alert alert-warning alert-dismissible fade show" style="max-width: 100%;border-radius: 5%;">
+        <strong>Are you Sure ?</strong> <br>
+        Once you confirm,all your account data will be permanently Deleted..
+    </div>
+    <br>
+    <div class="col-xs-12 col-sm-6 form-group">
+     
+      <input type="text" id ="reason" name="reason" placeholder="Enter the reason" class="form-control" required/>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 form-group">
+      <label><b>Enter your Password</b></label>
+      <input type="password" id ="password" name="password" placeholder="Enter the Password" class="form-control" required/>
+    </div>
+      
+    <br>
+      <button class="btn btn-primary" type="submit" id="Delete" style="background-color:#2dc997;max-width: 90px;" ><b>DELETE</b></button>
+      <a href="/user/current"class="btn btn-danger" type="submit"><b>CANCEL</b></a>
+
+    
+    
+    </form>
+      </div>
+    </div>
+
+
+
+
+    <div align="center" id ="editprofile" class="container-fluid" style="display: none;margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+    border-color:#2dc997; border-radius: 7%; max-width: 1000px;">
+    <h2 style="text-align: center;font-weight: bold;"id ="login">Edit Profile </h2>
+
+    <label  id = "message"style="color:red;display:none"><b>Now you can edit your profile</b> </label>
+      <form action ="/user/update/profile" method ="POST">
+        <div class="col-lg-12 ">
+        <div class=" col-xs-12 col-sm-6 col-md-9">
+          <input type="hidden" value="{{id}}" name="id">
+            {% if id == 'Ordinary' %}
+              
+              <div class="row">
+              <div class="col-xs-12 col-sm-6 form-group">
+              <label><b>First Name &nbsp;<span style="color: red;">*</span></b></label>
+              <input type="text" id="fname" name="fname" placeholder="Enter First Name" class="form-control" readonly value="{{profile.fname}}" pattern="([a-zA-Z]*)" title="It contains alphabets only"   />
+              </div>
+              
+              <div class="col-xs-12 col-sm-6 form-group">
+              <label><b>Last Name &nbsp;<span style="color: red;">*</span></b></label>
+              <input type="text" id="lname" name="lname" placeholder="Enter Last Name" class="form-control" readonly value="{{profile.lname}}" pattern="([a-zA-Z]*)" title="It contains alphabets only"  />
+              </div>
+              </div>					
+        
+    
+              <div class="row">					
+              <div class="col-xs-12 col-sm-6 form-group">
+              <label><b>Mobile Number &nbsp;<span style="color: red;">*</span></b></label>
+              <input type="tel" id ="mobile" name="mobile" placeholder="Enter Mobile Number *" class="form-control" readonly value="{{profile.phone}}"  maxlength="10" pattern="[0-9]{10}" title="10 digit number"  />	</div>
+        
+        
+              <div class="col-xs-12 col-sm-6 form-group">
+              <label><b>Email Address &nbsp;<span style="color: red;">*</span></b></label>
+              <input type="email" id="email" name="email" placeholder="Enter Email Address *" class="form-control" readonly value="{{profile.mail}}" title="Valid email address" />
+              </div>	
+              </div>
+        
+              <div class = "row">
+              <div class="form-group col-xs-12 col-sm-6">
+              <label><b>Address &nbsp;<span style="color: red;">*</span></b></label>
+              <textarea placeholder="Enter Address Here.." name="address" id="address" rows="3" class="form-control"readonly >{{profile.address}}</textarea>
+              </div>	
+              
+
+              <div id="statediv" class="col-xs-12 col-sm-6 form-group">
+              <label><b>State&nbsp;<span style="color: red;">*</span></b></label>
+              <input type="text"id="state"  class="form-control" readonly value="{{profile.state}}"/>
+              </div>
+              </div>
+        
+              <div class = "row">
+              <div id="citydiv" class="col-xs-12 col-sm-6 form-group ">
+              <label><b>city&nbsp;<span style="color: red;">*</span></b></label>
+              <input type="text" id="city" class="form-control" readonly value="{{profile.city}}" />
+              </div>
+        
+        
+              <div class="col-xs-12 col-sm-6 form-group">
+              <label><b>Zip &nbsp;<span style="color: red;">*</span></b></label>
+              <input type="text" id="zip" name="zip" placeholder="Enter Zip Code Here.." class="form-control"readonly value="{{profile.zip}}" pattern="[0-9]{6}" title="It contains 6 digits only" maxlength="6" />
+              </div>
+              </div>		
+                  
+              {% else %}
+              
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 form-group">
+                  <label><b>First Name &nbsp;<span style="color: red;">*</span></b></label>
+                  <input type="text" placeholder="Enter First Name"id="Afname" name="fname" class="form-control" value="{{profile.fname}}" pattern="([a-zA-Z]*)" title="It contains alphabets only" readonly required />
+                </div>
+                <div class="col-xs-12 col-sm-6 form-group">
+                  <label><b>Last Name &nbsp;<span style="color: red;">*</span></b></label>
+                  <input type="text" placeholder="Enter Last Name" id="Alname" name="lname" class="form-control" value="{{profile.lname}}" pattern="([a-zA-Z]*)" title="It contains alphabets only" readonly  required />
+                </div>
+                </div>			
+          
+    
+                <div class="row">					
+                <div class="col-xs-12 col-sm-6 form-group">
+                <label><b>Mobile Number &nbsp;<span style="color: red;">*</span></b></label>
+                <input type="tel" placeholder="Enter Mobile Number *" id="Amobile" name="mobile" class="form-control" value="{{profile.phone}}"  maxlength="10" pattern="[0-9]{10}" title="10 digit number" readonly required >	</div>
+    
+    
+                <div class="col-xs-12 col-sm-6 form-group">
+                <label><b>Email Address &nbsp;<span style="color: red;">*</span></b></label>
+                <input type="email" placeholder="Enter Email Address *" id="Aemail" name="email" value="{{profile.mail}}" class="form-control" readonly required>
+                </div>	
+                </div>
+                <br>
+                <div class="row">
+                <div id ="jobdiv" class="col-xs-12 col-sm-6 form-group">
+                <label for="job">Job Title:</label>&nbsp;<span style="color: red;">*</span></b></label>
+
+                <input type="text" placeholder="Enter Job Title " class="form-control" value="{{profile.job}}" readonly />
+                </div>
+    
+                </div>
+
+                {%endif%}
+            </div>
+            
+          </div>
+        
+                  <br>
+                 
+                   
+                  {% if id == 'Ordinary' %}
+                    
+                    <a type="button" href="#editprofile" onclick="EditOrdPro()" id ="edit" class="btn btn-primary"><b>EDIT</b></a>
+                    {% else %} 
+                    <a type="button" href="#editprofile" onclick="EditAuthoPro()" id ="edit" class="btn btn-primary"><b>EDIT</b></a>
+                    {%endif%}
+                    <button type="submit" id ="save" disabled style="color: white; background-color:#2dc997;max-width: 70px;" class="btn btn-primary"><b>SAVE</b></button>
+                    <a type="button" href="/user/current" id ="back2"class="btn btn-danger"><b>BACK</b></a><br><br>
+                    
+                  </form>
+      </div>
+      
+      
+  
+
+    {% endblock %}
+

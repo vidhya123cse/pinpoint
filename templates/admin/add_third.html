@@ -1,0 +1,111 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+      <div class="content">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="container mt-3" id="Message">
+              {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category=='success' %}
+                      <div class="alert alert-success mb-3" role="alert" >
+                        {{message}}
+                      </div>
+                    {% endif %}
+                    
+                    {% if category=='error' %}
+                      <div class="alert alert-danger mb-3" role="alert" >
+                        {{message}}
+                      </div>
+                    {% endif %}
+                  
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+        </div>
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">Add a Third Party Entity</h4>
+              <p class="card-category">No other third party can enrolled without permission of admin</p>
+            </div>
+            <div class="card-body">
+              <div id="typography"><br><br>
+                  <center>
+                  <div class="col-md-6" id ="mass" style="background-color: lightblue;">
+                  <form action="/Admin/third_party" method="POST">
+                  <h4><b style="color:black;"></style>Input Department</b>
+                  </h4>
+                  {% if all == [] %}
+                  <div class="alert alert-danger">
+                    <strong>Info!</strong> There are no registered Departments
+                  </div>
+    
+                  {% endif %}
+                  
+ <div class ="container-fluid">
+                  <select class="form-control"  id='firstList' name='firstList' onclick="showfield(this.value)" style="background-color:cadetblue;"   pattern="[A-Za-z]" required>
+                  <option class="dropdown-item" value="">--Select--</option>
+                  {% for al in all %}
+                  <option class="dropdown-item" value="{{al[0]}}">{{al[0]}}</option>
+                  {% endfor %}
+                  <option class="dropdown-item" value="Other">Other</option>
+                  
+    </select>
+
+                   
+            
+                   <br>  <div class ="container-fluid" id="div1" style="display: none;">
+                  <h4><b style="color:black;">Input New Department</h4></b>
+                
+                   <input type="text" class="form-control"  id='secondList' name='secondList' style="background-color:cadetblue;">
+                   <br></div>
+
+                    <h4><b style="color:black;">Enter Name With Location</h4></b>
+                  
+                     <input type="text" class="form-control"  id='thirdList' name='thirdList' style="background-color:cadetblue;" required>
+                     <br>
+                   
+                   <h4><b style="color:black;">Official Email Id</h4></b>
+                   <input type="email"  class="form-control"  id='fourthList' name="fourthList"  style="background-color:cadetblue;" required>
+                   <br>
+                   <h4><b style="color:black;">Official Mobile Number</h4></b>
+                   <input type="tel"  class="form-control"  id='phone' name="phone"  style="background-color:cadetblue;" required>
+                   <br>
+
+
+                  </div>
+
+                 
+                    <div class="text-center"> 
+                      <button type="submit" class="btn btn-primary btn-lg" style="max-width: 300px;margin-left: 10px; background-color:#2dc997; margin-bottom: 10px;"> Send Temporary Id and Psw</button>
+                   <button type="reset" class="btn btn-danger" style="max-width:300px;margin-left: 10px; margin-bottom: 10px;"> Reset The Field 
+                            </button></div>
+                          </form></div>
+                   <br><br><br>
+                  
+                  </div>
+                  
+                  </center>
+
+
+                  <script type="text/javascript">
+function showfield(name)
+{
+    if(name=='Other'){
+		document.getElementById('div1').style.display="block";
+		document.getElementById("secondList").required = true;
+	}
+    else{ 
+		document.getElementById('div1').style.display="none";
+		document.getElementById("secondList").required = false;
+	}
+}
+                    </script>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   
+                    <body onload="hidefield()">
+
+                      {% endblock %}
+    

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="apple-touch-icon" sizes="76x76" href="{{url_for('static', filename='img/apple-icon.png')}}">
+  <link rel="icon" type="image/png" href="{{url_for('static', filename='img/favicon.png')}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>
+    Admin
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- CSS Files -->
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/material-dashboard.min.css') }}">
+  <!--   <link href="../static/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
+CSS Just for demo purpose, don't include it in your project 
+  <link href="../static/demo/demo.css" rel="stylesheet" /> -->
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='demo/demo.css') }}">
+
+</head>
+<script>
+  window.setTimeout("document.getElementById('message').style.display='none';",5000);
+</script>
+<script>
+
+function editprofile()
+{
+  document.getElementById("fname").readOnly = false;
+  document.getElementById("lname").readOnly = false;
+  document.getElementById("email").readOnly = false;
+  document.getElementById("phone").readOnly = false;
+
+  document.getElementById("okbutton").disabled = false;
+
+  document.getElementById("message").style.display = "block";
+  window.setTimeout("document.getElementById('message').style.display='none';",5000);
+
+}
+</script>
+<body class="dark-edition">
+  <body class="dark-edition">
+    <div class="wrapper ">
+      <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-2.jpg">
+        <!--
+          Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+  
+          Tip 2: you can also add an image using data-image tag
+      -->
+        <div class="logo"><a href="/Admin" class="simple-text logo-normal">
+            PINPOINT ADMIN
+          </a></div>
+        <div class="sidebar-wrapper">
+          <ul class="nav">
+            <li class="nav-item active ">
+              <a class="nav-link " href="/Admin">
+                <i class="material-icons">dashboard</i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Admin/user">
+                <i class="material-icons">accessibility</i>
+                <p>Verify User</p>
+              </a>
+            </li>
+          
+            <li class="nav-item ">
+              <a class="nav-link" href="/Admin/third_party">
+                <i class="material-icons">add_circle</i>
+                <p>Add a Third Party</p>
+              </a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="/Admin/add_admin">
+                <i class="material-icons">add_circle</i>
+                <p>Add an Admin</p>
+              </a>
+            </li>
+
+            <li class="nav-item ">
+              <a class="nav-link" href="/Admin/process">
+                <i class="material-icons">update</i>
+                <p>Third Party's Response </p>
+              </a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="/Admin/remove_user">
+                <i class="material-icons">content_cut</i>
+                <p>Remove Users</p>
+              </a>
+            </li>
+            
+           
+          </ul>
+        </div>
+      </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <div class="bs-example">
+          <div class="nav-menu pull-right">
+
+          <div class="nav-item dropdown" >
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+              <span class="caret">Hi,&nbsp;{{user}} </span></a>
+              
+            <div class="dropdown-menu" >
+              <a class="dropdown-item" data-toggle="modal" data-target="#modaledit">Edit Profile</a>
+              <a class="dropdown-item" data-toggle="modal" data-target="#passedit">Change Password</a>
+              <a class="dropdown-item" data-toggle="modal" data-target="#useredit">Change Username</a>
+              <a href="/logout" class="dropdown-item" >Logout</a>
+              <a class="dropdown-item" data-toggle="modal" data-target="#delete">Delete Account</a>
+              <!--  <div class="dropdown-divider" ></div>
+                <a href="#"class="dropdown-item">Trash</a>
+            </div>  -->
+      
+          
+          </div>
+        </div>
+      </div>
+ </div>
+      <!-- End Navbar -->
+
+
+<div id="modaledit"class="modal fade"role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+
+  <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE ADMIN INFO</b></h4>
+  <br>
+
+  <button class="btn btn-secondary" onclick="editprofile();">edit</button>
+  </div>
+
+   
+    <label  id = "message"style="color:red;display:none"><b>Now you can edit your profile</b> </label>
+  <br>
+
+  <form  method="POST" action="/Admin/editprofile" id="modal-details1">
+    <div class="modal-body" >
+  <div class="form-group">
+  <label style= "color:#343a40"><b>Admin ID:</b></label>
+  <input type="text" readonly  id="adminid"  style= "color:#343a40" class="form-control" name="adminid" value="{{admin.admin_id}}" >
+  </div>
+
+  <div class="form-group">
+  <label  style= "color:#343a40"><b>First Name:</b></label>        
+    <input type="text" id="fname" readonly style= "color:#343a40" class="form-control" name="fname" value="{{admin.fname}}" >
+  </div>
+
+  <div class="form-group">
+  <label  style= "color:#343a40"><b>Last Name:</b></label>
+  <input type="text" id="lname" readonly  style= "color:#343a40" class="form-control" name="lname" value="{{admin.lname}}" >
+  </div>
+
+  <div class="form-group">
+  <label  style= "color:#343a40"><b>Email:</b></label>
+  <input type="text" id="email" readonly style= "color:#343a40" class="form-control" name="email" value="{{admin.mail}}">
+  </div>
+
+  <div class="form-group">
+  <label  style= "color:#343a40"><b>Phone:</b></label>
+  <input type="text" id="phone" readonly style= "color:#343a40" class="form-control" name="phone" value="{{admin.phone}}">
+  </div>
+
+  </div>
+
+  <div class="form-group" style="margin-left: 10px;">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+    <button type="submit" name="uppro" disabled class="btn btn-primary submitBtn" id = "okbutton" form="modal-details1"><b>UPDATE</b></button>
+  </div>
+
+  </form>
+  </div>
+  </div>
+ </div>
+ </div>
+                                     
+
+
+<div id="passedit"class="modal fade"role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+
+  <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE PASSWORD</b></h4>
+  <br>
+  </div> 
+  <br>
+  <form  method="POST" action="/Admin/updatepassword" id="modal-details2">
+    <div class="modal-body" >
+
+  <div class="form-group">
+  <input type="password" id="oldpass" placeholder="Enter your Current Password"  style= "color:#343a40" class="form-control" name="oldpass" >
+  </div>
+
+  <div class="form-group">
+  <input type="password" id="newpass" placeholder="Enter New Password"  style= "color:#343a40" class="form-control" name="newpass" >
+  </div>
+
+  <div class="form-group">
+  <input type="password" id="confpass" placeholder="Re-enter new Password"  style= "color:#343a40" class="form-control" name="confpass" >
+  </div>
+
+  </div>
+
+  <div class="form-group" style="margin-left: 10px;">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+    <button type="submit" name="uppass" class="btn btn-primary submitBtn" id="pass" form="modal-details2"><b>UPDATE</b></button>
+  </div>
+  
+  </form>
+  </div>
+  </div>
+ </div>
+ </div>
+
+
+ <div id="useredit"class="modal fade"role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+
+  <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE USERNAME</b></h4>
+  <br>
+  </div>
+
+   
+  <br>
+  <div class="modal-body" >
+  <form  method="POST" action="/Admin/editusername" id="modal-details3">
+
+  <div class="form-group">
+  <input type="text" id="olduser"style= "color:#343a40" class="form-control" name="olduser" placeholder="Enter your Current Username" >
+  </div>
+
+  <div class="form-group">
+  <input type="text" id="newuser"style= "color:#343a40" class="form-control" name="newuser" placeholder="Enter New Username" >
+  </div>
+
+  <div class="form-group">
+  <input type="text" id="confuser"style= "color:#343a40" class="form-control" name="confuser" placeholder="Re-Enter new Username" >
+  </div>
+
+  </div>
+
+  <div class="form-group" style="margin-left: 10px;">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+    <button type="submit" name="upuser" id="user" class="btn btn-primary submitBtn" form="modal-details3"><b>UPDATE</b></button>
+  </div>
+  
+  </form>
+  </div>
+  </div>
+ </div>
+ </div>
+
+
+
+
+ <div id="delete"class="modal fade"role="dialog">
+  <div id=co  style="color: black;">
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+
+  <h4 class="modal-title"><b style="font-weight:700; text-align: center;">DELETE ACCOUNT</b></h4>
+  <br>
+  </div>
+
+   
+  <br>
+
+  <form  method="POST" action="/Admin/delete" id="modal-details4">
+    <div class="modal-body" >
+  <div class="alert alert-warning alert-dismissible fade show" style="max-width: 100%;border-radius: 5%;">
+  <strong>Are you Sure ?</strong> <br>
+  Once you confirm,all your account data will be permanently Deleted..
+  </div>
+
+  <br>
+  <div class="form-group">
+  <input type="text" id ="reason" name="reason" placeholder="Enter the reason" style= "color:#343a40" class="form-control" required/>
+  </div>
+
+  <div class="form-group">
+  <input type="password" id="password" placeholder="Enter the Password"  style= "color:#343a40" class="form-control" name="password" >
+  </div>
+
+  </div>
+
+  <div class="form-group" style="margin-left: 10px;">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+    <button type="submit" name="delete" id="delete2" class="btn btn-primary submitBtn" form="modal-details4"><b>DELETE</b></button>
+  </div>
+  
+  </form>
+  </div>
+  </div>
+ </div>
+ </div>
+
+
+
+
+      {% block body %}
+      {% endblock %}
+
+
+      {% include 'admin/footer.html' %}
+  

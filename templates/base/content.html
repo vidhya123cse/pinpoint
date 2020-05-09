@@ -1,0 +1,281 @@
+<section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to PINPOINT</h1>
+      <h2>Finding a missing person can be a difficult task, but if you know where to look, it is often much easier to find a missing person. Just follow some simple steps to find a missing person in our website. </h2>
+      <a href="#about" class="btn-get-started">Get Started</a>
+    </div>
+  </section><!-- #hero -->
+
+  <main id="main">
+
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+        <div class="row about-container">
+
+          <div class="col-lg-6 content order-lg-1 order-2">
+            <h2 class="title">Few Words About Us</h2>
+            <p>
+              Our mission is to bring all the lost person to their home, or to bring the information to the lost people to their families, our workers collect information about these lost people and regularly update the information on website.
+            </p>
+
+            <div class="icon-box wow fadeInUp">
+              <div class="icon"><i class="fa fa-shopping-bag"></i></div>
+              <h4 class="title"><a href="">First Step </a></h4>
+              <p class="description">create an account or already existed login</p>
+            </div>
+
+            <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+              <div class="icon"><i class="fa fa-photo"></i></div>
+              <h4 class="title"><a href="">Second step </a></h4>
+              <p class="description">Upload missing person images</p>
+            </div>
+
+            <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+              <div class="icon"><i class="fa fa-bar-chart"></i></div>
+              <h4 class="title"><a href="">Third step</a></h4>
+              <p class="description">Any video is available upload it</p>
+            </div>
+
+          </div>
+
+      
+      </div>
+    </section><!-- #about -->
+
+    <!--==========================
+      Facts Section
+    ============================-->
+    <section id="facts">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">Facts</h3>
+          <p class="section-description">Our Journey In Counts</p>
+        </div>
+        <div class="row counters">
+
+  				<div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ value.Ordinary + value.Authority + value.Admin + value.Third_party }}</span>
+            <p>Users</p>
+  				</div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ value.Total_request }}</span>
+            <p>Total video Request</p>
+  				</div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ value.Total_Real }}</span>
+            <p>Total Realtime Request</p>
+          </div>
+          
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ value.Total_upload }}</span>
+            <p>Total Upload </p>
+  				</div>
+
+  			</div>
+
+      </div>
+    </section><!-- #facts -->
+  
+
+  <!-- login section -->
+
+<div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+border-color:#2dc997; border-radius: 7%; max-width: 650px;">
+<form action="/login" method="POST">
+  <h2 style="text-align: center;font-weight: bold;"id ="login">LOGIN </h2>
+ <center>
+  
+  <div class="container">
+    <form action="" id ="signin" method ="POST" onsubmit="javascript:codevalidate(); return false;">
+    <div class="col-xs-12 col-sm-6 col-md-9 ">
+    <input type="text" placeholder="Enter Username" name="uname" id="uname" title="It contain letters and numbers only"  required>
+    
+
+    
+    <br>
+    <input type="password" placeholder="Enter Password" id ="psw" name="psw"  pattern="[0-9a-zA-Z].{8,}" title="It includes  numbers , uppercase,lowercase letter, and at least 8 or more characters required (Max length:12)" required >
+    
+    <div class="g-recaptcha" data-theme="light" data-sitekey="6LeS0eEUAAAAAAPvV-ivUDw37ZWfgorEXqNYDMSj" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;" ></div>
+    <br>
+
+    <span class="alert alert-danger" id ="captche"></span>
+    <br><br>
+    <button  type="submit" id="loginbutton" style="background-color:#2dc997;" >Login</button><br>
+    <br>
+  </div>
+</form>
+  <div class="container" style="background-color:#f1f1f1;">
+  
+    <span class="psw">Forgot <a style="color:#2dc997;" href="#" >password?</a></span>
+  </div><br>
+  <p style="float: left;"><label>Don't Have an account</label>&nbsp;&nbsp;<a style = "text-decoration: none; color: white;background-color: #2dc997;"type="submit" data-toggle="modal" data-target="#modalLRForm"  class = "btn">Click Here</a></p><br>
+</center> <br><br>
+</form>
+</div>
+
+  
+    <!-- #login -->
+
+  
+    <script type="text/javascript">
+      window.setTimeout("document.getElementById('Message').style.display='none';", 8000); </script>					
+<!-- Reg form -->
+
+
+<div id = "register">
+  <div id = "relogin">
+    {% if scroll %}
+    <div class="container mt-3" id="Message">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category=='success' %}
+              <div class="alert alert-success mb-3" role="alert" >
+                {{message}}
+              </div>
+            {% endif %}
+            
+            {% if category=='error' %}
+              <div class="alert alert-danger mb-3" role="alert" >
+                {{message}}
+              </div>
+            {% endif %}
+          
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+</div>
+    <script>
+        document.getElementById('{{ scroll }}').scrollIntoView();
+        // or
+        document.location.hash = '#' + '{{ scroll }}';
+    </script>
+    {% endif %}
+</div>
+</div>
+
+  <!--Regform -->
+
+
+
+
+
+   
+  <div class=" modal fade" style="margin:auto auto auto auto;" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-left:0em;">
+    <div class="modal-dialog cascading-modal" role="document" style="margin:20px auto auto auto; max-width: 80%;min-width: 330px;">
+      <!--Content-->
+     
+      <div class="modal-content container-fluid"  style="margin:auto auto auto auto;border-radius: 25px;">
+        
+        <!--Modal cascading tabs-->
+        <center> 
+        <div class="modal-c-tabs" style="margin:auto auto auto auto; max-width: 70%;border-radius: 10%;min-width: 320px;" >
+  
+          <!-- Nav tabs -->
+          
+          <div role="group" aria-label="Basic example" id ="lost">
+            <button type="button"   class="btn" style="max-width: 35%; border-radius: 30%;display:inline-block ;margin-top: 30px; color: white;background-color: #2dc997;" onclick="User();" id = "but1">User
+            </button>
+            
+            <button type="button"  class="btn" style="max-width: 35%; border-radius: 30%;min-width: 100px; display:inline-block; margin-top: 30px; margin-bottom: 30px; color: white;background-color: #2dc997;" onclick="Authority();" id ="but2">Authority
+            </button>
+           
+          </div>
+          <div id = "user"></div>
+          <div id = "authority"></div>
+          
+       
+     
+             
+                <button  type="button" class="btn btn-outline-info waves-effect ml-auto"  style=" max-width: 20%;border-radius: 30%; margin-bottom: 30px;" data-dismiss="modal" id = "but4">Close</button>
+              </div> 
+        </center>
+              </div>
+      
+            </div>
+            
+          </div>
+        
+    
+
+
+
+
+
+
+
+							
+	
+
+
+
+          
+    <!--============
+      Services Section
+    ============================-->
+    <section id="services">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">Services</h3>
+          <p class="section-description"> The police are now taking steps to empower the public in getting access to the same content so that the common man can track missing persons online.</p>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-desktop"></i></a></div>
+              <h4 class="title"><a  href="">social services</a></h4>
+              <p class="description">Help to find spot a person in a crowd</p>
+            </div>
+          </div>
+          <!--
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-bar-chart"></i></a></div>
+              <h4 class="title"><a href="">Dolor Sitema</a></h4>
+              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-paper-plane"></i></a></div>
+              <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-photo"></i></a></div>
+              <h4 class="title"><a href="">Magni Dolores</a></h4>
+              <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-road"></i></a></div>
+              <h4 class="title"><a href="">Nemo Enim</a></h4>
+              <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+            <div class="box">
+              <div class="icon"><a href=""><i class="fa fa-shopping-bag"></i></a></div>
+              <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
+              <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
+            </div>
+          </div>
+        </div>
+ -->
+      </div>
+    </section><!-- #services -->
+
+    {% include 'base/contact.html' %}
+
+  </main>
+
+

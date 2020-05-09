@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+
+
+
+{% block body %}
+
+<br>
+<div class="container mt-3" id="Message">
+    {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+                 
+             {% for category, message in messages %}
+                  {% if category == 'mass' %}
+                  <center>
+            <div id ="message" class="alert alert-info mb-3" style="max-width: 700px;" role="alert">
+              {{message}} <br>
+            </div>
+            </center>
+          {% endif %}
+
+          {% if category == 'success' %}
+                  <center>
+            <div id ="message" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+              {{message}} <br>
+            </div>
+            </center>
+          {% endif %}
+
+          {% if category == 'error' %}
+                  <center>
+            <div id ="message" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+              {{message}} <br>
+            </div>
+            </center>
+          {% endif %}
+
+          {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+{% endblock %}

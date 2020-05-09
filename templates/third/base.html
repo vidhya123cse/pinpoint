@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  
+  
+  <link rel="apple-touch-icon" sizes="76x76" href="{{url_for('static', filename='img/apple-icon.png')}}">
+
+  
+  <link rel="icon" type="image/png" href="{{url_for('static', filename='img/favicon.png')}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ 
+
+  <title>
+    ThirdParty
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/material-dashboard.min.css') }}"> 
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='demo/demo.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    
+    input::placeholder {
+    color:black;
+  }
+  
+    </style>
+
+
+
+  <script>
+
+
+
+$("#close").click(function ()
+ {
+  $("#reject").hide();
+});
+
+
+
+function PendingUsers()
+{
+  
+  $("#updatediv").hide();
+  $("#liverecord").hide();  
+  $("#editprofile").hide();
+  document.getElementById("pending").style.display = 'block';
+  $("#pending").show();
+
+
+}
+
+function Liverecording()
+{
+  $("#updatediv").hide(); 
+  $("#pending").hide(); 
+  $("#editprofile").hide();
+  document.getElementById("liverecord").style.display = 'block';
+  $("#liverecord").show();
+
+}
+
+
+function UpdatePassword()
+{
+
+  $("#pending").hide();
+  $("#liverecord").hide();
+  $("#editprofile").hide();
+  document.getElementById("updatediv").style.display = 'block';
+  $("#updatediv").show();
+}
+
+function Updateprofile()
+{
+  $("#pending").hide();
+  $("#liverecord").hide();
+  $("#updatediv").hide(); 
+  document.getElementById("editprofile").style.display = 'block';
+  $("#editprofile").show();
+}
+
+
+
+
+
+function Reject()
+{
+  document.getElementById("reject").style.display = 'block';
+}
+
+
+
+window.setTimeout("document.getElementById('message').style.display='none';",5000);
+
+function editprofile()
+{
+  document.getElementById("fname").readOnly = false;
+  document.getElementById("lname").readOnly = false;
+  document.getElementById("email").readOnly = false;
+  document.getElementById("phone").readOnly = false;
+
+  document.getElementById("okbutton").disabled = false;
+
+
+  document.getElementById("message").style.display = "block";
+  window.setTimeout("document.getElementById('message').style.display='none';",5000);
+
+}
+  </script>
+
+
+
+
+</head>
+
+<body class="dark-edition">
+  <body class="dark-edition">
+    <div class="wrapper">
+      <div class="sidebar" data-color="purple" data-background-color="black" data-image="{{url_for('static', filename='img/sidebar-2.jpg')}}">
+        <div class="logo">
+          <a href="/" class="simple-text logo-normal">
+            PINPOINT THIRD PARTY
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <ul class="nav">
+            <li class="nav-item active ">
+              <a class="nav-link " href="/thirdparty">
+                <i class="material-icons">dashboard</i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pending" onclick="PendingUsers();">
+                <i class="material-icons">accessibility</i>
+                <p>Pending Users</p>
+              </a>
+            </li>
+          
+            <li class="nav-item ">
+              <a class="nav-link" href="#liverecord" onclick="Liverecording();">
+                <i class="material-icons">add_circle</i>
+                <p>Realtime Video</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="main-panel">
+            <!-- Navbar -->
+            <div class="bs-example">
+              <div class="nav-menu pull-right">
+    
+              <div class="nav-item dropdown" >
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret">Hi,&nbsp;{{user}} </span></a>
+                  
+                <div class="dropdown-menu" >
+                  <a class="dropdown-item" data-toggle="modal" data-target="#modaledit">Edit Profile</a>
+                  <a class="dropdown-item" data-toggle="modal" data-target="#passedit">Change Password</a>
+                  <a class="dropdown-item" data-toggle="modal" data-target="#useredit">Change Username</a>
+                  <a href="/logout" class="dropdown-item" >Logout</a>
+                  <a class="dropdown-item" data-toggle="modal" data-target="#delete">Delete Account</a>
+                  <!--  <div class="dropdown-divider" ></div>
+                    <a href="#"class="dropdown-item">Trash</a>
+                </div>  -->
+          
+              
+              </div>
+            </div>
+          </div>
+     </div>
+
+
+     <div id="modaledit"class="modal fade"role="dialog">
+      <div id=co  style="color: black;">
+      <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+    
+      <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE THIRD PARTY INFO</b></h4>
+      <br>
+    
+      <button class="btn btn-secondary" onclick="editprofile();">edit</button>
+      </div>
+    
+      
+        <label  id = "message"style="color:red;display:none"><b>Now you can edit your profile</b> </label>
+      <br>
+    
+      <form  method="POST" action="/thirdparty/editprofile" id="modal-details1">
+        <div class="modal-body" >
+      <div class="form-group">
+      <label style= "color:#343a40"><b>ThirdParty ID:</b></label>
+      <input type="text" readonly  id="thirdid"  style= "color:#343a40" class="form-control" name="thirdid" value="{{third.third_party_id}}" >
+      </div>
+    
+      <div class="form-group">
+      <label  style= "color:#343a40"><b>Name:</b></label>        
+        <input type="text" id="name" readonly style= "color:#343a40" class="form-control" name="name" value="{{third.name}}" >
+      </div>
+    
+    
+      <div class="form-group">
+      <label  style= "color:#343a40"><b>Email:</b></label>
+      <input type="text" id="email" readonly style= "color:#343a40" class="form-control" name="email" value="{{third.mail}}">
+      </div>
+    
+      <div class="form-group">
+      <label  style= "color:#343a40"><b>Phone:</b></label>
+      <input type="text" id="phone" readonly style= "color:#343a40" class="form-control" name="phone" value="{{third.phone}}">
+      </div>
+    
+      </div>
+    
+      <div class="form-group" style="margin-left: 10px;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+        <button type="submit" class="btn btn-primary submitBtn" name="okbutton" disabled form="modal-details1"><b>UPDATE</b></button>
+      </div>
+    
+      </form>
+      </div>
+      </div>
+     </div>
+     </div>
+                                         
+    
+    
+    <div id="passedit"class="modal fade"role="dialog">
+      <div id=co  style="color: black;">
+      <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+    
+      <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE PASSWORD</b></h4>
+      <br>
+      </div>
+      <br>
+    
+      <form  method="POST" action="/thirdparty/updatepassword" id="modal-details2">
+        <div class="modal-body" >
+      <div class="form-group">
+      <input type="password" id="oldpass" placeholder="Enter your Current Password"  style= "color:#343a40" class="form-control" name="oldpass" >
+      </div>
+    
+      <div class="form-group">
+      <input type="password" id="newpass" placeholder="Enter New Password"  style= "color:#343a40" class="form-control" name="newpass" >
+      </div>
+    
+      <div class="form-group">
+      <input type="password" id="confpass" placeholder="Re-enter new Password"  style= "color:#343a40" class="form-control" name="confpass" >
+      </div>
+    
+      </div>
+    
+      <div class="form-group" style="margin-left: 10px;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+        <button type="submit" class="btn btn-primary submitBtn" form="modal-details2"><b>UPDATE</b></button>
+      </div>
+      
+      </form>
+      </div>
+      </div>
+     </div>
+     </div>
+    
+    
+     <div id="useredit"class="modal fade"role="dialog">
+      <div id=co  style="color: black;">
+      <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+    
+      <h4 class="modal-title"><b style="font-weight:700; text-align: center;">UPDATE USERNAME</b></h4>
+      <br>
+      </div>
+      <br>
+      <form  method="POST" action="/thirdparty/editusername" id="modal-details3">
+        <div class="modal-body" >
+      <div class="form-group">
+      <input type="text" id="olduser"style= "color:#343a40" class="form-control" name="olduser" placeholder="Enter your Current Username" >
+      </div>
+    
+      <div class="form-group">
+      <input type="text" id="newuser"style= "color:#343a40" class="form-control" name="newuser" placeholder="Enter New Username" >
+      </div>
+    
+      <div class="form-group">
+      <input type="text" id="confuser"style= "color:#343a40" class="form-control" name="confuser" placeholder="Re-Enter new Username" >
+      </div>
+    
+      </div>
+    
+      <div class="form-group" style="margin-left: 10px;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+        <button type="submit" class="btn btn-primary submitBtn" form="modal-details3"><b>UPDATE</b></button>
+      </div>
+      
+      </form>
+      </div>
+      </div>
+     </div>
+     </div>
+    
+    
+    
+     <div id="delete"class="modal fade"role="dialog">
+      <div id=co  style="color: black;">
+      <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+    
+      <h4 class="modal-title"><b style="font-weight:700; text-align: center;">DELETE ACCOUNT</b></h4>
+      <br>
+      </div>
+      <br>
+      <form  method="POST" action="/thirdparty/delete" id="modal-details4">
+        <div class="modal-body" >
+      <div class="alert alert-warning alert-dismissible fade show" style="max-width: 100%;border-radius: 5%;">
+      <strong>Are you Sure ?</strong> <br>
+      Once you confirm,all your account data will be permanently Deleted..
+      </div>
+    
+      <br>
+      <div class="form-group">
+      <input type="text" id ="reason" name="reason" placeholder="Enter the reason" style= "color:#343a40" class="form-control" required/>
+      </div>
+    
+      <div class="form-group">
+      <input type="password" id="password" placeholder="Enter the Password"  style= "color:#343a40" class="form-control" name="password" >
+      </div>
+    
+      </div>
+    
+      <div class="form-group" style="margin-left: 10px;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
+        <button type="submit" class="btn btn-primary submitBtn" form="modal-details4"><b>DELETE</b></button>
+      </div>
+      
+      </form>
+      </div>
+      </div>
+     </div>
+     </div>
+
+
+
+
+      {% block body %} {% endblock %}
+    {% include 'third/footer.html' %}
+
