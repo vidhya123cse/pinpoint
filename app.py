@@ -67,7 +67,7 @@ facerec = dlib.face_recognition_model_v1('models/dlib_face_recognition_resnet_mo
 #database models
 db = SQLAlchemy(app)
 #db is the refrence
-de = 0.5
+
 #User table
 class User(db.Model):
     __tablename__ = 'User'
@@ -246,6 +246,12 @@ class Count(db.Model):
 
         
 #end
+
+count = Count.query.filter(Count.id == 1).first()
+de = count.Threshhold
+print(de)
+
+
 
 
 #ML Functions
@@ -1135,6 +1141,9 @@ def download5(filename):
 
         send = Other.query.filter_by(usr_name = session["user"]).first()
         send.no_of_video_request = 0
+        send.result_time = ''
+        send.result_percent = ''
+        send.result_query = ''
         db.session.add(send)
         db.session.commit()
 
@@ -1655,6 +1664,8 @@ def  processing(uname):
             send.start_time = ''
             send.end_time = ''
             send.no_of_video_request = 2
+            send.result_time = time
+            send.result_percent = maxacc
             db.session.add(send)
 
             count = Count.query.filter_by(id = 1).first()
@@ -1975,6 +1986,42 @@ def remove():
         return render_template('admin/remove.html',admin=admin, admin1=admin1,normal=normal,third=third, officials=officials,user=user)
     else:
         return redirect(url_for('relogin'))
+
+
+
+@app.route('/Admin/threshold')
+def Threshold():
+    if "admin" in session:
+        user = session["admin"]
+        admin = Admin.query.filter_by(usr_name = session["admin"]).first()
+
+        count = Count.query.filter_by(id = 1).first()
+        thres = count.Threshhold
+
+        return render_template('admin/threshhold.html',user=user,admin=admin,thres = thres)    
+    else:
+        return redirect(url_for('relogin')) 
+
+
+@app.route('/Admin/Threshold/Update', methods = ['POST'])
+def thresupdate():
+
+    if "admin" in session:
+        user = session["admin"]
+        if request.method == "POST":
+            value = request.form['thresvalue']
+            admin = Admin.query.filter_by(usr_name = session["admin"]).first()
+
+            count = Count.query.filter_by(id = 1).first()
+            count.Threshhold = value
+            db.session.add(count)
+            db.session.commit()
+            flash('Successfullly changed Threshold value','success')
+            return redirect(url_for('admindashboard'))   
+
+    else:
+        return redirect(url_for('relogin')) 
+
 
 
 
