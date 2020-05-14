@@ -103,8 +103,7 @@ window.setTimeout("document.getElementById('message').style.display='none';",500
 
 function editprofile()
 {
-  document.getElementById("fname").readOnly = false;
-  document.getElementById("lname").readOnly = false;
+  document.getElementById("name").readOnly = false;
   document.getElementById("email").readOnly = false;
   document.getElementById("phone").readOnly = false;
 
@@ -224,7 +223,7 @@ function editprofile()
     
       <div class="form-group" style="margin-left: 10px;">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>CLOSE</b></button>
-        <button type="submit" class="btn btn-primary submitBtn" name="okbutton" disabled form="modal-details1"><b>UPDATE</b></button>
+        <button type="submit" class="btn btn-primary submitBtn" id="okbutton" name="okbutton" disabled form="modal-details1"><b>UPDATE</b></button>
       </div>
     
       </form>

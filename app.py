@@ -182,7 +182,7 @@ class Other(db.Model):
     result_query,result_percent,usr_name):
         self.admin_approval=admin_approval
         self.admin_id=admin_id
-        self.no_of_video_upload = no_of_video_upload
+        self.no_of_video_upload=no_of_video_upload
         self.no_of_video_request=no_of_video_request
         self.third_party_issue_id=third_party_issue_id
         self.third_party_pending_order=third_party_pending_order
