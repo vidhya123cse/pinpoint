@@ -36,7 +36,7 @@
                 <tr>
         
                   <th>Username</th>
-                <th>email</th>
+                <th>City</th>
                 <td></td>
               </tr>
           
@@ -57,10 +57,9 @@
                             
 
                              <td> {{user.usr_name}}</td> 
-                             <td>{{user.mail}}</td>
+                             <td>{{user.city}}</td>
                              <td>
                               <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit_ord{{user.id}}">view</a>
-                              <button class="btn btn-success">Send Notification Email</button> 
    
    
                           </td>
@@ -101,12 +100,6 @@
 
                 <label  style= "color:#343a40">Last Name:</label>
                 <input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
-
-
-                 <label  style= "color:#343a40">Email:</label>
-
-                 <input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
-
 
               
                  <label  style= "color:#343a40">Phone:</label>
@@ -169,12 +162,12 @@
       <tr>
         
         <th>Username</th>
-        <th>Email</th>
+        <th>City</th>
       <th></th>
     </tr>
               {% if authority == [] %}
               <div class="alert alert-danger">
-                <strong>Info!</strong> There are no registered users 
+                <strong>Info!</strong> There are no registered officials 
               </div>
 
               {% endif %}
@@ -187,9 +180,9 @@
                <!--- <li class="list-group-item"><a href="Users/{{user.id}}"> -->
                
                    <td> {{user.usr_name}}</td> 
-                   <td>{{user.mail}}</td>
+                   <td>{{user.job}}</td>
                   <td><button class="btn btn-warning btn-xs"data-toggle="modal" data-target="#modaledit_auth{{user.id}}"" >View</button>  
-                    <button class="btn btn-success">Send Notification Email</button> 
+              
                   </td>
                   </tr>
                            <!-- Modal Edit Employee-->
@@ -226,12 +219,6 @@
                 <input type="text" readonly   style= "color:#343a40" class="form-control" name="lastname" value="{{user.lname}}" >
 
 
-                 <label  style= "color:#343a40">Email:</label>
-
-                 <input type="text" readonly style= "color:#343a40" class="form-control" name="email" value="{{user.mail}}">
-
-
-              
                  <label  style= "color:#343a40">Phone:</label>
 
                  <input type="text" readonly style= "color:#343a40" class="form-control" name="phone" value="{{user.phone}}">

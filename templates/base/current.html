@@ -647,6 +647,7 @@ function hidepreview()
     <div  id="notification"style="display: none;" >
 
       {% if notifi != None %}
+      {% if notifi != 'not' %}
       <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
     border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
 
@@ -655,7 +656,9 @@ function hidepreview()
       <br>
       <label>Output : &nbsp; Found </label>
       <br>
-      <label>Time Spotted &nbsp;:&nbsp;</label>
+      <label>Time Spotted &nbsp;:&nbsp;{{notifi.result_time}}</label>
+      <br>
+      <label>Confidence Percentage &nbsp;:&nbsp;{{notifi.result_percent}}</label>
       <br>
       <br>
       <p>Click on the icon to view the Output video:<p>
@@ -670,6 +673,19 @@ function hidepreview()
     </center>
 
     </div>
+    {% endif %}
+    {% if notifi == 'not' %}
+    <div class="container-fluid" style="margin-top: 100px; margin-bottom: 100px;padding: 2%; border-style: solid;
+    border-color:#2dc997; border-radius: 7%; max-width: 650px;background-color: aliceblue;">
+<center>
+<p>Your Request has been declined by Thirdparty<p>
+  <br><br>
+  <a href="/user/Processed/none"class="btn btn-danger" type="submit"><b>BACK</b></a>
+  
+</center>
+</div>
+
+    {% endif %}
     {% endif %}
 
     {% if notifi == None %}
@@ -752,7 +768,7 @@ function hidepreview()
         
               <div class="col-xs-12 col-sm-6 form-group">
               <label><b>Email Address &nbsp;<span style="color: red;">*</span></b></label>
-              <input type="email" id="email" name="email" placeholder="Enter Email Address *" class="form-control" readonly value="{{profile.mail}}" title="Valid email address" />
+              <input type="email" id="email" name="email" placeholder="Enter Email Address *" class="form-control" readonly value="{{mail}}" title="Valid email address" />
               </div>	
               </div>
         

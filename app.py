@@ -7,6 +7,7 @@ from flask_wtf import FlaskForm
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from random import seed
+import random
 from random import randint
 import dlib,cv2
 import numpy as np
@@ -34,6 +35,7 @@ ALLOWED_VIDEOEXTENSIONS = set(['mp4'])
 
 app = Flask(__name__)
 mail=Mail(app)
+posta=Mail(app)
 s = URLSafeTimedSerializer('secret')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -74,11 +76,15 @@ class User(db.Model):
     id = db.Column(db.Integer, autoincrement=True)
     username = db.Column(db.String(50),unique=True, nullable=False,primary_key=True)
     password = db.Column(db.String(15),nullable=False)
+    mail = db.Column(db.String(50))
+    hash= db.Column(db.String(120))
     type = db.Column(db.String(15),nullable=False)
 
-    def __init__(self,username,password,type):
+    def __init__(self,username,password,mail,hash,type):
         self.username=username
         self.password=password
+        self.mail=mail
+        self.hash=hash
         self.type=type
     
 #Admin Table
@@ -88,16 +94,14 @@ class Admin(db.Model):
     fname = db.Column(db.String(50))
     lname = db.Column(db.String(50))
     phone = db.Column(db.Integer)
-    mail = db.Column(db.String(50))
     admin_id = db.Column(db.String(20))
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
 
-    def __init__(self,usr_name,fname,lname,phone,mail,admin_id):
+    def __init__(self,usr_name,fname,lname,phone,admin_id):
         self.usr_name=usr_name
         self.fname=fname
         self.lname=lname
         self.phone=phone
-        self.mail=mail
         self.admin_id=admin_id 
         
 #Authority Table
@@ -107,19 +111,17 @@ class Authority(db.Model):
     fname = db.Column(db.String(50))
     lname = db.Column(db.String(50))
     phone = db.Column(db.Integer)
-    mail = db.Column(db.String(50))
     job = db.Column(db.String(50))
     proof=db.Column(db.String(40))
     confirm=db.Column(db.Boolean,unique=False, default=False)
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
     
 
-    def __init__(self,usr_name,fname,lname,phone,mail,job,proof,confirm):
+    def __init__(self,usr_name,fname,lname,phone,job,proof,confirm):
         self.usr_name=usr_name
         self.fname=fname
         self.lname=lname
         self.phone=phone
-        self.mail=mail
         self.job=job
         self.proof=proof 
         self.confirm=confirm
@@ -132,7 +134,6 @@ class Ordinary(db.Model):
     fname = db.Column(db.String(30))
     lname = db.Column(db.String(30))
     phone = db.Column(db.Integer)
-    mail = db.Column(db.String(30))
     state = db.Column(db.String(30))
     city = db.Column(db.String(30))
     proof=db.Column(db.String(40))
@@ -142,12 +143,11 @@ class Ordinary(db.Model):
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
     
 
-    def __init__(self,usr_name,fname,lname,phone,mail,state,city,address,zip,proof,confirm):
+    def __init__(self,usr_name,fname,lname,phone,state,city,address,zip,proof,confirm):
         self.usr_name=usr_name
         self.fname=fname
         self.lname=lname
         self.phone=phone
-        self.mail=mail
         self.state=state
         self.proof=proof    
         self.address=address
@@ -162,7 +162,7 @@ class Other(db.Model):
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     admin_approval = db.Column(db.String(5))
     admin_id =  db.Column(db.String(20))
-    no_of_video_upload = db.Column(db.Integer)
+    no_video_upload = db.Column(db.Integer)
     no_of_video_request = db.Column(db.Integer)
     third_party_issue_id = db.Column(db.String(20)) 
     third_party_pending_order = db.Column(db.String(10))
@@ -177,12 +177,12 @@ class Other(db.Model):
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
     
 
-    def __init__(self,admin_approval,admin_id,no_of_video_upload,no_of_video_request,third_party_issue_id,
+    def __init__(self,admin_approval,admin_id,no_video_upload,no_of_video_request,third_party_issue_id,
     third_party_pending_order,third_party_response,date,start_time,end_time,live_recording_no,result_time,
     result_query,result_percent,usr_name):
         self.admin_approval=admin_approval
         self.admin_id=admin_id
-        self.no_of_video_upload=no_of_video_upload
+        self.no_video_upload=no_video_upload
         self.no_of_video_request=no_of_video_request
         self.third_party_issue_id=third_party_issue_id
         self.third_party_pending_order=third_party_pending_order
@@ -203,17 +203,15 @@ class Third(db.Model):
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     dept = db.Column(db.String(50))
     name = db.Column(db.String(50))
-    mail = db.Column(db.String(50))
     third_party_id = db.Column(db.String(20))
     phone = db.Column(db.Integer)
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
 
-    def __init__(self,usr_name,dept,name,mail,third_party_id,phone):
+    def __init__(self,usr_name,dept,name,third_party_id,phone):
         self.usr_name=usr_name
         self.dept=dept
         self.name=name
         self.phone=phone
-        self.mail=mail
         self.third_party_id=third_party_id
 
 
@@ -247,9 +245,11 @@ class Count(db.Model):
         
 #end
 
-count = Count.query.filter(Count.id == 1).first()
-de = count.Threshhold
-print(de)
+def THreshhold():
+
+    count = Count.query.filter(Count.id == 1).first()
+    de = count.Threshhold
+    return de
 
 
 
@@ -379,16 +379,18 @@ def Register():
          file1 = request.files['idproof']
          proof = file1.filename
          exists = User.query.filter_by(username=username).first()
-         if not exists:
+         emailid = User.query.filter_by(mail=email).first()
+         if not exists or not emailid:
+
             if(password == confpassword):
-                reg = User(username = username,password = password,type = 'Ordinary')
+                reg = User(username = username,password = password, mail = email,hash='', type = 'Ordinary')
                 db.session.add(reg)
 
-                ord = Ordinary(fname = fname, lname = lname, phone = phone, mail = email, state = state,
+                ord = Ordinary(fname = fname, lname = lname, phone = phone, state = state,
                 city = city,proof = proof, address = address, zip = zip, usr_name = username,confirm=0)
                 db.session.add(ord)
 
-                other = Other(admin_approval = 'no', admin_id = '', no_of_video_upload = 0, no_of_video_request = 0, 
+                other = Other(admin_approval = 'no', admin_id = '', no_video_upload = 0, no_of_video_request = 0, 
                 third_party_issue_id = '',third_party_pending_order = '',third_party_response = '', date = '', 
                 start_time = '', end_time = '', live_recording_no = 0,result_time = '',result_query = '',
                 result_percent = 0,usr_name = username )
@@ -419,13 +421,12 @@ def Register():
                 
 
 
-     else:
-         flash('Username already taken,try somethig else','error')
-         return redirect(url_for('error'))
+         else:
+            flash('Username or Email already taken,try somethig else','error')
+            return redirect(url_for('error'))
              
 
-    
-         
+            
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -433,11 +434,22 @@ def confirm_email(token):
         email = s.loads(token, salt='email-confirm', max_age=172800)
     except SignatureExpired:
         return '<h1>The link is expired!</h1>'
-    Ord = Ordinary.query.filter_by(mail=email).first()
-    Ord.confirm = 1
-    db.session.add(Ord)
-    db.session.commit()
-    return '<h1>Your email is verifed!</h1>'
+    use = User.query.filter_by(mail=email).first()
+    if use:
+        print(use.type)
+        if use.type == "Ordinary":
+            Ord = Ordinary.query.filter_by(usr_name=use.username).first()
+            
+        if use.type == "Authority":
+            Ord = Authority.query.filter_by(usr_name=use.username).first()
+            
+        Ord.confirm = 1
+        db.session.add(Ord)
+        db.session.commit()
+        return '<h1>Your email is verifed!</h1>'
+        
+    else:
+        return '<h1>Mail not Found!</h1>'
 
 @app.route('/reg_official', methods=['GET','POST'])
 def Register2():
@@ -456,16 +468,18 @@ def Register2():
         if job == 'Other':
             job = department
         exists = User.query.filter_by(username=username).first()
-        if not exists:
+        emailid = User.query.filter_by(mail=email).first()
+        if not exists or not emailid:
+
             if(password == confpassword):
                 
-                reg = User(username = username,password = password,type = 'Authority')
+                reg = User(username = username,password = password, mail = email,hash='', type = 'Authority')
                 db.session.add(reg)
 
-                Auth = Authority(fname = fname, lname = lname, phone = phone, mail = email, proof = proof, job=job , usr_name = username,confirm=0)
+                Auth = Authority(fname = fname, lname = lname, phone = phone, proof = proof, job=job , usr_name = username,confirm=0)
                 db.session.add(Auth)
 
-                other = Other(admin_approval = 'no', admin_id = '', no_of_video_upload = 0, no_of_video_request = 0, 
+                other = Other(admin_approval = 'no', admin_id = '', no_video_upload = 0, no_of_video_request = 0, 
                 third_party_issue_id = '',third_party_pending_order = '',third_party_response = '', date = '', 
                 start_time = '', end_time = '', live_recording_no = 0,result_time = '',result_query = '',
                 result_percent = 0, usr_name = username )
@@ -494,7 +508,7 @@ def Register2():
 
         else:
             
-            flash('Username already taken,try somethig else','error')
+            flash('Username or Email already taken,try somethig else','error')
             return redirect(url_for('error'))
         
 
@@ -511,6 +525,9 @@ def login():
 
         if login:
             
+            if login.hash == "rejected":
+                return 'Rejected by the Admin'
+
             if login.type == 'Admin':
                 session["admin"] = uname
                 flash(uname + ' Successfully Logged in','mass')
@@ -522,15 +539,20 @@ def login():
                     con = Ordinary.query.filter_by(usr_name=uname).first()
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
-                    if oth.admin_approval == "reject" or oth.admin_approval == "no":
+                    if oth.admin_approval == "no":
                         return 'not verified by admin'
+                    if oth.admin_approval == "reject":
+                        return 'Rejected by the Admin'
                 
                 if login.type == 'Authority':
                     con = Authority.query.filter_by(usr_name=uname).first()
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
-                    if oth.admin_approval == "reject" or oth.admin_approval == "no":
+                    if oth.admin_approval == "no":
                         return 'not verified by admin'
+                    if oth.admin_approval == "reject":
+                        return 'Rejected by the Admin'
+
 
                 session["user"] = uname
                 flash(uname + ' Successfully Logged in','mass')
@@ -559,7 +581,6 @@ def current():
     print(all)
     
     a = []
-    len1 = len(all)
     for al in all:
         a.append(Third.query.filter_by(dept = al[0]).all())
     print(a)
@@ -572,9 +593,13 @@ def current():
 
     id = User.query.filter_by(username = session["user"]).first()
     id2 = id.type
+    email = id.mail
     print(id2)
     notifi = Other.query.filter_by(usr_name = session["user"],no_of_video_request = 2).first()
     print(notifi)
+    if notifi != None:
+        if(notifi.result_time == ''):
+            notifi = 'not'
     if(id.type == "Ordinary"):
         pro = Ordinary.query.filter_by(usr_name = session["user"]).first()
         print(pro)
@@ -584,10 +609,10 @@ def current():
 
     
     if all == []:
-        return render_template('base/current.html',third = "third",profile=pro,id = id2,notifi = notifi,user = session["user"])
+        return render_template('base/current.html',third = "third",profile=pro,id = id2,mail = email,notifi = notifi,user = session["user"])
 
 
-    return render_template('base/current.html',all=all,a=a,profile=pro,id = id2,notifi = notifi,user = session["user"])
+    return render_template('base/current.html',all=all,a=a,profile=pro,mail = email,notifi = notifi,user = session["user"])
   
   else:
       return redirect(url_for('relogin'))
@@ -609,6 +634,12 @@ def profileupdate():
 
      if request.method == 'POST':
          typeid = request.form['id']
+         email = request.form['email']
+         use = User.query.filter_by(mail = email).first()
+         if use:
+             flash("Email ID Already in Use",'error')
+             return redirect(url_for('current'))
+
          if typeid == "Ordinary":
              print(typeid)
              fname = request.form['fname']
@@ -626,14 +657,18 @@ def profileupdate():
              ordi.fname = fname
              ordi.lname = lname
              ordi.phone = mobile
-             ordi.mail = email
              ordi.address = address
              if state != "":
                  ordi.state = state
                  ordi.city = city
              ordi.zip = zip
 
+             user1 = User.query.filter_by(username = session["user"]).first()
+             user1.mail = email
+
+             db.session.add(user1)
              db.session.add(ordi)
+
              db.session.commit()
              flash("Successfully Updated Your Profile",'success')
              return redirect(url_for('current'))
@@ -655,7 +690,6 @@ def profileupdate():
              auth.fname = fname
              auth.lname = lname
              auth.phone = mobile
-             auth.mail = email
              
              if job != "":
                 if job == "Other":
@@ -664,14 +698,15 @@ def profileupdate():
                 else:
                     auth.job = job
             
-             print(department)
+             user1 = User.query.filter_by(username = session["user"]).first()
+             user1.mail = email
 
+             db.session.add(user1)
              db.session.add(auth)
+
              db.session.commit()
              flash("Successfully Updated Your Profile",'success')
-             return redirect(url_for('current'))
-
-         
+             return redirect(url_for('current'))         
 
 
          return typeid
@@ -709,8 +744,6 @@ def passwordupdate():
   
   else:
       return redirect(url_for('relogin'))
-
-
 
 
 
@@ -995,7 +1028,7 @@ def train():
                             shape = sp(img_rgb, d)
                             face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                            last_found = {'name': 'unknown', 'dist': de, 'color': (0,0,255), 'percent': 0}
+                            last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255), 'percent': 0}
 
                             for name, saved_desc in descs.items():
                                 dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1024,7 +1057,7 @@ def train():
                     success = "You have successfully Processed the Video"
 
                     send = Other.query.filter_by(usr_name = session["user"]).first()
-                    send.no_of_video_upload = send.no_of_video_upload + 1
+                    send.no_video_upload = send.no_video_upload + 1
                     db.session.add(send)
 
                     count = Count.query.filter_by(id = 1).first()
@@ -1040,8 +1073,6 @@ def train():
                 flash('Only one video can upload','error')
                 print("Only one video can upload")
                 return redirect(url_for('current'))
-
-
 
 
 
@@ -1082,7 +1113,7 @@ def train():
                     shape = sp(img_rgb, d)
                     face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                    last_found = {'name': 'unknown', 'dist': de, 'color': (0,0,255),'percent': 0}
+                    last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
 
                     for name, saved_desc in descs.items():
                         dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1132,6 +1163,18 @@ def train():
   else:
       return redirect(url_for('relogin'))
 
+@app.route('/user/Processed/none', methods=['GET', 'POST'])
+def clickback():
+    if "user" in session:
+        send = Other.query.filter_by(usr_name = session["user"]).first()
+        send.no_of_video_request = 0
+        db.session.add(send)
+        db.session.commit()
+
+        return redirect(url_for('current'))
+
+    else:
+      return redirect(url_for('relogin'))
 
 
 
@@ -1165,15 +1208,17 @@ def  thirddashboard():
     all = Other.query.filter_by(third_party_issue_id = session["third"],third_party_pending_order = 'no').all()
     len1 = len(all)
     third = Third.query.filter_by(usr_name = session["third"]).first()
+    user1 = User.query.filter_by(username = session["third"]).first()
+    email = user1.mail
     if (len1 == 0):
         value = 'None'
         flash("You do not have any Request",'None')
-        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third = third)
+        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third = third,email=email)
 
     else:
         value = 'success'
         flash("You Have " + str(len1) + " Request",'success5')
-        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third=third)
+        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third=third,email=email)
     
   else:
       return redirect(url_for('relogin'))
@@ -1183,6 +1228,13 @@ def  thirddashboard():
 @app.route('/thirdparty/editprofile', methods=["POST"])
 def editthird():
  if "third" in session:
+
+    email = request.form['email']
+    use = User.query.filter_by(mail = email).first()
+    if use:
+        flash("Email ID Already in Use",'error')
+        return redirect(url_for('thirddashboard'))
+
 
     if request.method == "POST":
         name = request.form['name']
@@ -1195,10 +1247,14 @@ def editthird():
         third = Third.query.filter_by(usr_name = session["third"]).first()
         print(third)
         third.name = name
-        third.mail = email
         third.phone = phone
-        
+
+        user1 = User.query.filter_by(username = session["third"]).first()
+        user1.mail = email
+
+        db.session.add(user1)
         db.session.add(third)
+
         db.session.commit()
         flash("You have successfully updated your profile",'success')
     return redirect(url_for('thirddashboard'))
@@ -1310,9 +1366,7 @@ def deletethird():
                 db.session.delete(delete2)
                 db.session.commit()
 
-                session.clear()
-
-                
+                session.clear()   
                 return redirect(url_for('index'))
         
         else: 
@@ -1369,8 +1423,6 @@ def  PendingUser():
       return redirect(url_for('relogin'))
 
             
-
-
 @app.route('/thirdparty/realtimevideo',methods=['POST'])
 def  reatimevideo1():
   
@@ -1468,7 +1520,7 @@ def  reatimevideo1():
                 shape = sp(img_rgb, d)
                 face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                last_found = {'name': 'unknown', 'dist': de, 'color': (0,0,255),'percent': 0}
+                last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
 
                 for name, saved_desc in descs.items():
                     dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1506,8 +1558,6 @@ def  reatimevideo1():
 
         flash("You have successfully Processed the Video",'success3')
         return redirect(url_for('thirddashboard'))
-    
-
 
     else:
         print("Error")
@@ -1526,7 +1576,9 @@ def  admindashboard():
     if "admin" in session:
         user = session["admin"]
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
-        return render_template('admin/dashboard.html',user=user,admin=admin)
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail
+        return render_template('admin/dashboard.html',user=user,admin=admin,email=email)
     else:
         
         return redirect(url_for('relogin'))
@@ -1541,7 +1593,9 @@ def user():
         ordinary = (db.session.query(Ordinary).filter(Ordinary.usr_name == Other.usr_name).join(Other,Other.admin_approval == 'no')).all()
         authority = (db.session.query(Authority).filter(Authority.usr_name == Other.usr_name).join(Other,Other.admin_approval == 'no')).all()
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
-        return render_template('admin/user.html',ordinary = ordinary,authority = authority,user=user,admin=admin)
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail
+        return render_template('admin/user.html',ordinary = ordinary,authority = authority,user=user,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -1553,21 +1607,47 @@ def verify(username,value):
         print(username)
         result = value
         print(result)
+        adm = Admin.query.filter_by(usr_name = user).first()
+        if adm == None:
+            admin_id = user
+        else:
+            admin_id = adm.admin_id
         verify = Other.query.filter_by(usr_name = username).first()
         if result == 'accept':
             verify.admin_approval = 'accept'
-            verify.admin_id = 'Surej'
+            verify.admin_id = admin_id
             db.session.add(verify)
+
+            user1 = User.query.filter_by(username = username).first()
+            print(user1)
+            email = user1.mail
+
+            msg = Message('Hello'+' '+ username, sender = 'pinpoint.four.2020@gmail.com', recipients = [email])
+            msg.html = '<h5>Hi,</h5><h3>&nbsp; {}.<br>I am happy to inform you that, your account is verified successfully</h3>'.format(username)
+            mail.send(msg)
+
             db.session.commit()
-            flash('Verified successfully')
+            flash('Verified successfully and sent mail ')
             return redirect(url_for('user',user=user))
+
         elif result == 'reject':
             verify.admin_approval = 'reject'
-            verify.admin_id = 'Surej'
+            verify.admin_id = admin_id
             db.session.add(verify)
+
+            user1 = User.query.filter_by(username = username).first()
+            print(user1)
+            user1.hash = 'rejected'
+            email = user1.mail
+
+            msg = Message('Hello'+' '+ username, sender = 'pinpoint.four.2020@gmail.com', recipients = [email])
+            msg.html = '<h5>Hi,</h5><h3>&nbsp; {}.<br>I am sorry to inform you that, your account is rejected by Admin</h3>'.format(username)
+            mail.send(msg)
+
+            db.session.add(user1)
             db.session.commit()
          
-            flash('Verified successfully')
+            flash('Verified successfully and sent mail')
             return redirect(url_for('user',user=user))
     else:
         return redirect(url_for('relogin'))
@@ -1582,10 +1662,12 @@ def  process():
         fail = Other.query.filter_by(third_party_pending_order ='reject' ).all()
         processed = Other.query.filter_by(no_of_video_request = 2 ).all()
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail
         print(succ)
         print(fail)
         print(processed)
-        return render_template('admin/process.html',succ = succ ,fail = fail ,processed = processed ,user=user,admin=admin)
+        return render_template('admin/process.html',succ = succ ,fail = fail ,processed = processed ,user=user,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -1628,7 +1710,7 @@ def  processing(uname):
                     shape = sp(img_rgb, d)
                     face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                    last_found = {'name': 'unknown', 'dist': de, 'color': (0,0,255),'percent': 0}
+                    last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
 
                     for name, saved_desc in descs.items():
                         dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1654,7 +1736,6 @@ def  processing(uname):
             print(maxacc)
             time = convert(s/24)
             print(convert(s/24)) 
-            success = "You have successfully Processed the Video"
 
             send = Other.query.filter_by(usr_name = uname).first()
             send.third_party_issue_id = ''
@@ -1673,15 +1754,47 @@ def  processing(uname):
             db.session.add(count)
 
             db.session.commit()
-            flash('You have successfully processed the video','procc')
+            user1 = User.query.filter_by(username = uname).first()
+            email = user1.mail
+
+            msg = Message('Hello'+' '+ uname, sender = 'pinpoint.four.2020@gmail.com', recipients = [email])
+            msg.html = '<h5>Hi,</h5><h3>&nbsp; {}.<br>Your Video is Ready Please login and check</h3> <br> Click on this link to login <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>'.format(uname)
+            mail.send(msg)
+            flash('You have successfully processed the video and sent notification to user','procc')
             return redirect(url_for('process'))
 
    
-
-
     else:
         return redirect(url_for('relogin'))
-  
+
+@app.route('/Admin/sendresponse/<path:username>', methods=['GET', 'POST'])
+def sendresponse(username):
+
+    if "admin" in session:
+        user1 = User.query.filter_by(username = username).first()
+        print(user1)
+        email = user1.mail
+
+        msg = Message('Hello'+' '+ username, sender = 'pinpoint.four.2020@gmail.com', recipients = [email])
+        msg.html = '<h5>Hi,</h5><h3>&nbsp; {}.<br>We are sorry to inform you that ,your request has been declined by ThirdParty </h3>'.format(username)
+        mail.send(msg)
+        send = Other.query.filter_by(usr_name = username).first()
+        send.third_party_issue_id = ''
+        send.third_party_pending_order = ''
+        send.third_party_response = ''
+        send.date = ''
+        send.start_time = ''
+        send.end_time = ''
+        send.no_of_video_request = 2
+        db.session.add(send)
+
+        db.session.commit()
+        flash('Successfully sent the mail','procc')
+        return redirect(url_for('process'))
+    else:
+      return redirect(url_for('relogin'))
+
+
 
 @app.route('/Admin/Processed/result/<path:filename>', methods=['GET', 'POST'])
 def download4(filename):
@@ -1689,6 +1802,7 @@ def download4(filename):
         return send_from_directory(directory='result', filename=filename)
     else:
       return redirect(url_for('relogin'))
+
 
 
 
@@ -1717,8 +1831,9 @@ def third():
         user = session["admin"]
         all = db.session.query(Third.dept.distinct()).all()
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
-        len1 = len(all)
-     
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail
+
      
         if request.method == "POST":
             dept = request.form['firstList']
@@ -1729,7 +1844,7 @@ def third():
             
             if dept == 'Other':
                 dept = new
-            exists = Third.query.filter_by(mail = mail1).first()
+            exists = User.query.filter_by(mail = mail1).first()
 
             if not exists:
             
@@ -1741,11 +1856,11 @@ def third():
                 psw=str(v1)+name+str(v2)
             
 
-                user = User(username=uname,password=psw,type='Third_party')
-                register = Third(usr_name = uname, dept=dept, name=name, mail = mail1, phone=phone, third_party_id = third_party_id)
+                user2 = User(username=uname,password=psw,mail=mail1,hash='',type='Third_party')
+                register = Third(usr_name = uname, dept=dept, name=name, phone=phone, third_party_id = third_party_id)
                 count = Count.query.filter_by(id = 1).first()
                 count.Third_party = count.Third_party + 1
-                db.session.add(user)
+                db.session.add(user2)
                 db.session.add(register)
                 db.session.add(count)
                 db.session.commit()
@@ -1758,15 +1873,15 @@ def third():
 
                 
                 flash('A new Third Party added successfully','success')
-                return render_template('admin/add_third.html',all = all, user=user,admin=admin)
+                return render_template('admin/add_third.html',all = all, user=user,admin=admin,email=email)
             else:
-                flash('Already Registered','error')
+                flash('Mail ID already Registered','error')
 
 
         if all != None:
-            return render_template('admin/add_third.html',all = all,user=user,admin=admin)
+            return render_template('admin/add_third.html',all = all,user=user,admin=admin,email=email)
         else:
-            return render_template('admin/add_third.html',user=user,admin=admin)
+            return render_template('admin/add_third.html',user=user,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -1777,7 +1892,16 @@ def third():
 def editadmin():
  if "admin" in session:
 
+
     if request.method == "POST":
+
+        email3 = request.form['email']
+        use = User.query.filter_by(mail = email3).first()
+        if use:
+            flash("Email ID Already in Use",'error')
+            return redirect(url_for('admindashboard'))
+
+
         fname = request.form['fname']
         lname = request.form['lname']
         email = request.form['email']
@@ -1791,9 +1915,12 @@ def editadmin():
         print(admin)
         admin.fname = fname
         admin.lname = lname
-        admin.mail = email
         admin.phone = phone
 
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        user1.mail = email
+
+        db.session.add(user1)
         db.session.add(admin)
         db.session.commit()
         flash("You have successfully updated your profile",'success')
@@ -1927,7 +2054,9 @@ def deleteadmin():
 def register():
     if "admin" in session:
         user = session["admin"]
-        admin = Admin.query.filter_by(usr_name = session["admin"]).first()       
+        admin = Admin.query.filter_by(usr_name = session["admin"]).first()    
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail   
         if request.method == "POST":
             uname = request.form['uname']
             email = request.form['mail']
@@ -1936,8 +2065,10 @@ def register():
             phone = request.form['phone']
 
             exists = User.query.filter_by(username = uname).first()
+            emailid = User.query.filter_by(mail = email).first()
 
-            if not exists:
+
+            if not exists or not emailid:
                 
                 v1 = randint(0, 1000)
                 v2 = randint(100, 999)
@@ -1945,8 +2076,8 @@ def register():
                 value = Count.query.filter_by(id = 1).first()
                 admin_id = "Admin_" + str(value.Admin+1)
 
-                user = User(username=uname,password=psw,type='Admin')
-                register = Admin(usr_name = uname,fname=fname,lname=lname,mail = email, phone=phone, admin_id = admin_id)
+                user = User(username=uname,password=psw,mail=email,hash='',type='Admin')
+                register = Admin(usr_name = uname,fname=fname,lname=lname, phone=phone, admin_id = admin_id)
                 count = Count.query.filter_by(id = 1).first()
                 count.Admin = count.Admin + 1
                 db.session.add(user)
@@ -1962,12 +2093,12 @@ def register():
 
                 
                 flash('A new admin added successfullly','success')
-                return render_template('admin/add_admin.html',user=user,admin=admin)
+                return render_template('admin/add_admin.html',user=user,admin=admin,email=email)
             else:
-                flash('Username already taken,try somethig else','error')
+                flash('Username or Email already taken,try something else','error')
 
             
-        return render_template('admin/add_admin.html',user=user,admin=admin)
+        return render_template('admin/add_admin.html',user=user,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -1976,14 +2107,17 @@ def remove():
     if "admin" in session:
         user = session["admin"]
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail   
 
         admin1 = Admin.query.all()
         normal= Ordinary.query.all()
         third = Third.query.all()
         officials = Authority.query.all()
+        rejected = User.query.filter_by(hash = 'rejected').all()
         
         
-        return render_template('admin/remove.html',admin=admin, admin1=admin1,normal=normal,third=third, officials=officials,user=user)
+        return render_template('admin/remove.html',admin=admin, admin1=admin1,normal=normal,third=third, officials=officials,rejected = rejected,user=user,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -2007,11 +2141,8 @@ def Threshold():
 def thresupdate():
 
     if "admin" in session:
-        user = session["admin"]
         if request.method == "POST":
             value = request.form['thresvalue']
-            admin = Admin.query.filter_by(usr_name = session["admin"]).first()
-
             count = Count.query.filter_by(id = 1).first()
             count.Threshhold = value
             db.session.add(count)
@@ -2079,11 +2210,76 @@ def delete2(usr_name):
 #end
 
 
+@app.route('/forgot',methods=["POST","GET"])
+def forgot():
+    if request.method=="POST":
+        email = request.form['mail']
+        user = request.form['username']
+
+        check = User.query.filter_by(username=user).first()
+        if check.hash == "rejected":
+            flash('You are Rejected by the Admin','error')
+            return redirect(url_for('forgot'))
+        if not check:
+            flash('Invalid credential,username not found','error')
+            return redirect(url_for('forgot'))
+
+        if (check):
+            def get_random_string(length=24,allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
+                return ''.join(random.choice(allowed_chars) for i in range(length))
+            hash = get_random_string()
+            check.hash = hash
+            db.session.commit()
+            msg = Message('Confirm Password Change', sender = 'pinpoint.four.2020@gmail.com', recipients = [email])
+            msg.body = "Hello,\nWe've received a request to reset your password. If you want to reset your password, click the link below and enter your new password\n http://localhost:5000/" + check.hash
+            posta.send(msg)
+            flash('Please check your email for password reset link','success')
+            return redirect(url_for('forgot'))
+        else:
+            flash('Invalid credential','error')
+            return redirect(url_for('forgot'))
+    
+    else:
+            return render_template('base/forgot.html')
+    
+    
+    
+@app.route('/<string:hash>',methods=["GET","POST"])
+def hashcode(hash):
+
+
+    check = User.query.filter(User.hash == hash).first() 
+    
+
+    
+   
+    if check:
+        if request.method == 'POST':
+            passw = request.form['passw']
+            cpassw = request.form['cpassw']
+            if passw == cpassw:
+                check.password = passw
+                check.hash= None
+                db.session.commit()
+                return redirect(url_for('index'))
+            else:
+                flash('password and confirm password not matched','error')
+                return render_template('base/reset.html')
+        else:
+             return render_template('base/reset.html')
+    else:
+        return redirect(url_for('index'))
+
+
+
+
+
+
+
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for('relogin'))
-
+    return redirect(url_for('index'))
 
 #end
 
@@ -2094,6 +2290,7 @@ if(__name__ == "__main__"):
 
 
 #insert into Count(id,Ordinary,Authority,Admin,Third_party,Total_Real,Total_upload,Total_request,Total_crowd,Threshhold) values (1,0,0,0,0,0,0,0,0,0);
-
+#update Count set Threshhold = 0.43  where id = 1;
+#insert into User(username,password,hash,mail,type)values('Surejmohan','qwertyqwerty','','soorajmohan121997@gmail.com','Admin');
 
 

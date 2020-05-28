@@ -45,7 +45,7 @@
               
             {% if succ == [] and processed == [] %}
               <div class="alert alert-danger">
-                <strong>Info!</strong> There are no respose yet !!!
+                <strong>Info!</strong> There are no response yet !!!
               </div>
               {% endif %}
               
@@ -64,8 +64,7 @@
                   <td>
                    <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">Output Video</a>
                    <button type="button" disabled class="btn btn-secondary"><b style="color: rgba(255, 255, 255, 0.596);">Processed</b></button> 
-                   <a href ="" class="btn btn-info">Inform User</a>
-
+    
 
                </td>
 
@@ -154,8 +153,7 @@
                              <td>
                               <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">Check Video</a>
                               <a type="submit" href="/Admin/processing/{{user.usr_name}}" class="btn btn-success" onclick="return confirm('Are You Sure to start processing now ? Once it started it cannot be cancel and it will take some time')">start processing</a> 
-                              <button class="btn btn-info">Inform User</button>
-
+                             
    
                           </td>
    
@@ -265,7 +263,7 @@
                               <td> {{user.usr_name}}</td> 
                               <td></td>
                               <td>
-                                <button class="btn btn-info">Inform User</button>
+                                <a href="/Admin/sendresponse/{{user.usr_name}}" class="btn btn-info">Inform User</a>
     
                            </td>
     
@@ -300,7 +298,7 @@
                <div class="form-group">
  
  
-                  <label  style= "color:#343a40">sukker,you can put other options</label>
+                  <label  style= "color:#343a40">Phone</label>
  
                   <input type="text" style= "color:#343a40" class="form-control" name="phone" value="{{phone}}">
  
