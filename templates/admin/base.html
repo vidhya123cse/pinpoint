@@ -78,12 +78,14 @@ function editprofile()
                 <p>Add a Third Party</p>
               </a>
             </li>
+            {% if user == 'SuperAdmin' %}
             <li class="nav-item ">
               <a class="nav-link" href="/Admin/add_admin">
                 <i class="material-icons">add_circle</i>
                 <p>Add an Admin</p>
               </a>
             </li>
+            {% endif %}
 
             <li class="nav-item ">
               <a class="nav-link" href="/Admin/process">
@@ -97,12 +99,14 @@ function editprofile()
                 <p>Remove Users</p>
               </a>
             </li>
+            {% if user == 'SuperAdmin' %}
             <li class="nav-item ">
               <a class="nav-link" href="/Admin/threshold">
                 <i class="material-icons">update</i>
                 <p>Change Threshold Value </p>
               </a>
             </li>
+            {% endif %}
             
            
           </ul>
@@ -118,11 +122,17 @@ function editprofile()
               <span class="caret">Hi,&nbsp;{{user}} </span></a>
               
             <div class="dropdown-menu" >
+              {% if user != 'SuperAdmin' %}
               <a class="dropdown-item" data-toggle="modal" data-target="#modaledit">Edit Profile</a>
+              {% endif %}
               <a class="dropdown-item" data-toggle="modal" data-target="#passedit">Change Password</a>
+              {% if user != 'SuperAdmin' %}
               <a class="dropdown-item" data-toggle="modal" data-target="#useredit">Change Username</a>
+              {% endif %}
               <a href="/logout" class="dropdown-item" >Logout</a>
+              {% if user != 'SuperAdmin' %}
               <a class="dropdown-item" data-toggle="modal" data-target="#delete">Delete Account</a>
+              {% endif %}
               <!--  <div class="dropdown-divider" ></div>
                 <a href="#"class="dropdown-item">Trash</a>
             </div>  -->

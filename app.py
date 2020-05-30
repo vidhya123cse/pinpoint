@@ -12,6 +12,7 @@ from random import randint
 import dlib,cv2
 import numpy as np
 import os
+import hashlib
 from flask.helpers import flash, get_flashed_messages, send_from_directory
 from datetime import timedelta
 # seed random number generator
@@ -75,7 +76,7 @@ class User(db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, autoincrement=True)
     username = db.Column(db.String(50),unique=True, nullable=False,primary_key=True)
-    password = db.Column(db.String(15),nullable=False)
+    password = db.Column(db.String(100),nullable=False)
     mail = db.Column(db.String(50))
     hash= db.Column(db.String(120))
     type = db.Column(db.String(15),nullable=False)
@@ -383,7 +384,9 @@ def Register():
          if not exists or not emailid:
 
             if(password == confpassword):
-                reg = User(username = username,password = password, mail = email,hash='', type = 'Ordinary')
+                h = hashlib.md5(password.encode())
+                enpassword = h.hexdigest()
+                reg = User(username = username,password = enpassword, mail = email,hash='', type = 'Ordinary')
                 db.session.add(reg)
 
                 ord = Ordinary(fname = fname, lname = lname, phone = phone, state = state,
@@ -472,8 +475,9 @@ def Register2():
         if not exists or not emailid:
 
             if(password == confpassword):
-                
-                reg = User(username = username,password = password, mail = email,hash='', type = 'Authority')
+                h = hashlib.md5(password.encode())
+                enpassword = h.hexdigest()
+                reg = User(username = username,password = enpassword, mail = email,hash='', type = 'Authority')
                 db.session.add(reg)
 
                 Auth = Authority(fname = fname, lname = lname, phone = phone, proof = proof, job=job , usr_name = username,confirm=0)
@@ -520,8 +524,10 @@ def login():
         session.permanent = True       
         uname = request.form['uname']
         passw = request.form['psw']
+        h = hashlib.md5(passw.encode())
+        enpassword = h.hexdigest()
         
-        login = User.query.filter_by(username=uname, password=passw).first()
+        login = User.query.filter_by(username=uname, password=enpassword).first()
 
         if login:
             
@@ -725,12 +731,16 @@ def passwordupdate():
         confpassword = request.form['psw3']
 
         if newpassword == confpassword:
-            user = User.query.filter_by(username = session["user"],password = currentpass).first()
+            h = hashlib.md5(currentpass.encode())
+            enpassword = h.hexdigest()
+            user = User.query.filter_by(username = session["user"],password = enpassword).first()
             if user:
-                if user.password == newpassword:
+                h = hashlib.md5(newpassword.encode())
+                enpassword = h.hexdigest()
+                if user.password == enpassword:
                     flash("You have Entered same Password, Try some other",'error')
                 else:
-                    user.password = newpassword
+                    user.password = enpassword
                     db.session.add(user)
                     db.session.commit()
                     flash("Successfully Changed Password",'success')
@@ -819,7 +829,9 @@ def delete():
 
     if request.method == 'POST':
         password = request.form['password']
-        user = User.query.filter_by(username = session["user"],password = password ).first()
+        h = hashlib.md5(password.encode())
+        enpassword = h.hexdigest()
+        user = User.query.filter_by(username = session["user"],password = enpassword ).first()
         if user:
             delete1 = db.session.query(User).filter(User.username == session["user"]).first()
 
@@ -1274,12 +1286,16 @@ def updatethirdpass():
             confpassword = request.form['confpass']
 
             if newpassword == confpassword:
-                user = User.query.filter_by(username = session["third"],password = currentpass).first()
+                h = hashlib.md5(currentpass.encode())
+                enpassword = h.hexdigest()
+                user = User.query.filter_by(username = session["third"],password = enpassword).first()
                 if user:
-                    if user.password == newpassword:
+                    h = hashlib.md5(newpassword.encode())
+                    enpassword = h.hexdigest()
+                    if user.password == enpassword:
                         flash("You have Entered same Password, Try some other",'error')
                     else:
-                        user.password = newpassword
+                        user.password = enpassword
                         db.session.add(user)
                         db.session.commit()
                         flash("Successfully Changed Password",'success')
@@ -1352,7 +1368,9 @@ def deletethird():
 
     if request.method == 'POST':
         password = request.form['password']
-        user = User.query.filter_by(username = session["third"],password = password ).first()
+        h = hashlib.md5(password.encode())
+        enpassword = h.hexdigest()
+        user = User.query.filter_by(username = session["third"],password = enpassword ).first()
         if user:
             delete1 = db.session.query(User).filter(User.username == session["third"]).first()
 
@@ -1855,8 +1873,10 @@ def third():
                 third_party_id = uname
                 psw=str(v1)+name+str(v2)
             
+                h = hashlib.md5(psw.encode())
+                enpassword = h.hexdigest()
 
-                user2 = User(username=uname,password=psw,mail=mail1,hash='',type='Third_party')
+                user2 = User(username=uname,password=enpassword,mail=mail1,hash='',type='Third_party')
                 register = Third(usr_name = uname, dept=dept, name=name, phone=phone, third_party_id = third_party_id)
                 count = Count.query.filter_by(id = 1).first()
                 count.Third_party = count.Third_party + 1
@@ -1941,12 +1961,16 @@ def updateadminpass():
             confpassword = request.form['confpass']
 
             if newpassword == confpassword:
-                user = User.query.filter_by(username = session["admin"],password = currentpass).first()
+                h = hashlib.md5(currentpass.encode())
+                enpassword = h.hexdigest()
+                user = User.query.filter_by(username = session["admin"],password = enpassword).first()
                 if user:
-                    if user.password == newpassword:
+                    h = hashlib.md5(newpassword.encode())
+                    enpassword = h.hexdigest()
+                    if user.password == enpassword:
                         flash("You have Entered same Password, Try some other",'error')
                     else:
-                        user.password = newpassword
+                        user.password = enpassword
                         db.session.add(user)
                         db.session.commit()
                         flash("Successfully Changed Password",'success')
@@ -2019,7 +2043,9 @@ def deleteadmin():
 
     if request.method == 'POST':
         password = request.form['password']
-        user = User.query.filter_by(username = session["admin"],password = password ).first()
+        h = hashlib.md5(password.encode())
+        enpassword = h.hexdigest()
+        user = User.query.filter_by(username = session["admin"],password = enpassword).first()
         if user:
             delete1 = db.session.query(User).filter(User.username == session["admin"]).first()
 
@@ -2053,7 +2079,7 @@ def deleteadmin():
 
 def register():
     if "admin" in session:
-        user = session["admin"]
+        user1 = session["admin"]
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()    
         user1 = User.query.filter_by(username = session["admin"]).first()
         email = user1.mail   
@@ -2076,7 +2102,10 @@ def register():
                 value = Count.query.filter_by(id = 1).first()
                 admin_id = "Admin_" + str(value.Admin+1)
 
-                user = User(username=uname,password=psw,mail=email,hash='',type='Admin')
+                h = hashlib.md5(psw.encode())
+                enpassword = h.hexdigest()
+
+                user = User(username=uname,password=enpassword,mail=email,hash='',type='Admin')
                 register = Admin(usr_name = uname,fname=fname,lname=lname, phone=phone, admin_id = admin_id)
                 count = Count.query.filter_by(id = 1).first()
                 count.Admin = count.Admin + 1
@@ -2093,12 +2122,12 @@ def register():
 
                 
                 flash('A new admin added successfullly','success')
-                return render_template('admin/add_admin.html',user=user,admin=admin,email=email)
+                return render_template('admin/add_admin.html',user=user1,admin=admin,email=email)
             else:
                 flash('Username or Email already taken,try something else','error')
 
             
-        return render_template('admin/add_admin.html',user=user,admin=admin,email=email)
+        return render_template('admin/add_admin.html',user=user1,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -2291,6 +2320,6 @@ if(__name__ == "__main__"):
 
 #insert into Count(id,Ordinary,Authority,Admin,Third_party,Total_Real,Total_upload,Total_request,Total_crowd,Threshhold) values (1,0,0,0,0,0,0,0,0,0);
 #update Count set Threshhold = 0.43  where id = 1;
-#insert into User(username,password,hash,mail,type)values('Surejmohan','qwertyqwerty','','soorajmohan121997@gmail.com','Admin');
+#insert into User(username,password,hash,mail,type)values('SuperAdmin','12478e7ad0e39aa9c35be4b9a694ba9b','','pinpoint.four.2020@gmail.com','Admin');
 
 
