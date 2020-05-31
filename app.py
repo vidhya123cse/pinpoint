@@ -2078,8 +2078,8 @@ def deleteadmin():
 @app.route('/Admin/add_admin', methods=["GET","POST"])
 
 def register():
-    if "admin" in session:
-        user1 = session["admin"]
+    if "admin" in session and session["admin"] == "SuperAdmin":
+        user2 = session["admin"]
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()    
         user1 = User.query.filter_by(username = session["admin"]).first()
         email = user1.mail   
@@ -2122,12 +2122,12 @@ def register():
 
                 
                 flash('A new admin added successfullly','success')
-                return render_template('admin/add_admin.html',user=user1,admin=admin,email=email)
+                return render_template('admin/add_admin.html',user=user2,admin=admin,email=email)
             else:
                 flash('Username or Email already taken,try something else','error')
 
             
-        return render_template('admin/add_admin.html',user=user1,admin=admin,email=email)
+        return render_template('admin/add_admin.html',user=user2,admin=admin,email=email)
     else:
         return redirect(url_for('relogin'))
 
@@ -2154,7 +2154,7 @@ def remove():
 
 @app.route('/Admin/threshold')
 def Threshold():
-    if "admin" in session:
+    if "admin" in session and session["admin"] == "SuperAdmin":
         user = session["admin"]
         admin = Admin.query.filter_by(usr_name = session["admin"]).first()
 
@@ -2169,7 +2169,7 @@ def Threshold():
 @app.route('/Admin/Threshold/Update', methods = ['POST'])
 def thresupdate():
 
-    if "admin" in session:
+    if "admin" in session and session["admin"] == "SuperAdmin":
         if request.method == "POST":
             value = request.form['thresvalue']
             count = Count.query.filter_by(id = 1).first()
@@ -2236,6 +2236,40 @@ def delete2(usr_name):
         return redirect(url_for('relogin'))
 
 
+
+
+@app.route('/Admin/cleanup')
+def  Cleanup():
+    if "admin" in session and session["admin"] == "SuperAdmin":
+        user = session["admin"]
+        admin = Admin.query.filter_by(usr_name = session["admin"]).first()
+        user1 = User.query.filter_by(username = session["admin"]).first()
+        email = user1.mail
+        return render_template('admin/cleanup.html',user=user,admin=admin,email=email)
+
+    else:
+        flash("Invalid Access",'error')
+        return redirect(url_for('relogin'))
+
+
+@app.route('/Admin/cleandirectory/<string:foldername>')
+def  CleanDir(foldername):
+    if "admin" in session and session["admin"] == "SuperAdmin":
+
+        filelist = [f for f in os.listdir(foldername +'/')]
+        if filelist != []:
+            for f in filelist:
+                os.remove(os.path.join(foldername +'/', f))
+            flash("Completely Removed All the files in the "+ foldername +" folder",'success')
+            return redirect(url_for('Cleanup'))
+        else:
+            flash(foldername +" folder is empty",'error')
+            return redirect(url_for('Cleanup'))
+
+    
+    else:
+        return redirect(url_for('relogin'))
+        
 #end
 
 
