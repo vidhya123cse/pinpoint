@@ -618,7 +618,7 @@ def current():
         return render_template('base/current.html',third = "third",profile=pro,id = id2,mail = email,notifi = notifi,user = session["user"])
 
 
-    return render_template('base/current.html',all=all,a=a,profile=pro,mail = email,notifi = notifi,user = session["user"])
+    return render_template('base/current.html',all=all,a=a,profile=pro,id = id2, mail = email,notifi = notifi,user = session["user"])
   
   else:
       return redirect(url_for('relogin'))
