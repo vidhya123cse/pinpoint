@@ -389,8 +389,13 @@ def Register():
                 reg = User(username = username,password = enpassword, mail = email,hash='', type = 'Ordinary')
                 db.session.add(reg)
 
+                if file1 and allowed_file3(file1.filename):
+                    filename = secure_filename(file1.filename)
+                    filename = username +'_'+ filename 
+                    file1.save(os.path.join(app.config['IDPROOF_FOLDER'], filename))
+
                 ord = Ordinary(fname = fname, lname = lname, phone = phone, state = state,
-                city = city,proof = proof, address = address, zip = zip, usr_name = username,confirm=0)
+                city = city,proof = filename, address = address, zip = zip, usr_name = username,confirm=0)
                 db.session.add(ord)
 
                 other = Other(admin_approval = 'no', admin_id = '', no_video_upload = 0, no_of_video_request = 0, 
@@ -411,13 +416,8 @@ def Register():
                 link = url_for('confirm_email', token=token, _external=True)
                 msg.html = render_template('base/email.html',link=link)
                 mail.send(msg)
-
                 
-                if file1 and allowed_file3(file1.filename):
-                    filename = secure_filename(file1.filename)
-                    filename = username +'_' + filename 
-                    file1.save(os.path.join(app.config['IDPROOF_FOLDER'], filename))
-                    return redirect(url_for('mailactivation'))
+                return redirect(url_for('mailactivation'))
             else:
                 flash('Password and Confirm password not matched','error')
                 return redirect(url_for('error'))
@@ -480,7 +480,12 @@ def Register2():
                 reg = User(username = username,password = enpassword, mail = email,hash='', type = 'Authority')
                 db.session.add(reg)
 
-                Auth = Authority(fname = fname, lname = lname, phone = phone, proof = proof, job=job , usr_name = username,confirm=0)
+                if file1 and allowed_file3(file1.filename):
+                    filename = secure_filename(file1.filename)
+                    filename = username +'_'+ filename 
+                    file1.save(os.path.join(app.config['IDPROOF_FOLDER'], filename))
+
+                Auth = Authority(fname = fname, lname = lname, phone = phone, proof = filename, job=job , usr_name = username,confirm=0)
                 db.session.add(Auth)
 
                 other = Other(admin_approval = 'no', admin_id = '', no_video_upload = 0, no_of_video_request = 0, 
@@ -501,11 +506,7 @@ def Register2():
                 msg.html = render_template('base/email.html',link=link)
                 mail.send(msg)
                 
-                if file1 and allowed_file3(file1.filename):
-                    filename = secure_filename(file1.filename)
-                    filename = username +'_' + filename 
-                    file1.save(os.path.join(app.config['IDPROOF_FOLDER'], filename))
-                    return redirect(url_for('mailactivation'))
+                return redirect(url_for('mailactivation'))
             else:
                 flash('Password and Confirm password not matched','error')
                 return redirect(url_for('error'))

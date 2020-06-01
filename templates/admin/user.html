@@ -37,7 +37,8 @@
         
                   <th>Username</th>
                 <th>City</th>
-                <td></td>
+                <th></th>
+                <th>Email verification</th>
               </tr>
           
               
@@ -63,6 +64,14 @@
    
    
                           </td>
+                          <td>
+                            {% if user.confirm == 0 %}
+                            Not verified
+                            {% endif %}
+                            {% if user.confirm == 1 %}
+                            verified
+                            {% endif %}
+                           </td>
    
                             </tr>
                             
@@ -118,7 +127,7 @@
 
                 <label  style= "color:#343a40"> To check the IDProof, please click the button</label>
 
-               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
                 
 
              </div>
@@ -164,6 +173,7 @@
         <th>Username</th>
         <th>City</th>
       <th></th>
+      <th>Email verification</th>
     </tr>
               {% if authority == [] %}
               <div class="alert alert-danger">
@@ -181,9 +191,17 @@
                
                    <td> {{user.usr_name}}</td> 
                    <td>{{user.job}}</td>
-                  <td><button class="btn btn-warning btn-xs"data-toggle="modal" data-target="#modaledit_auth{{user.id}}"" >View</button>  
+                  <td><button class="btn btn-warning btn-xs"data-toggle="modal" data-target="#modaledit_auth{{user.id}}" >View</button>  
               
                   </td>
+                  <td>
+                    {% if user.confirm == 0 %}
+                    Not verified
+                    {% endif %}
+                    {% if user.confirm == 1 %}
+                    verified
+                    {% endif %}
+                   </td>
                   </tr>
                            <!-- Modal Edit Employee-->
 <div id="modaledit_auth{{user.id}}" class="modal fade"  role="dialog">
@@ -235,7 +253,7 @@
 
                 <label  style= "color:#343a40"> To check the IDProof, please click the button</label>
 
-               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.usr_name + '_' + user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
+               <a type="button"  class="btn btn-dark"href="/ID_Proof/{{user.proof}}" target="_blank" style="margin-right: 5px; background-color:green;" >ID PROOF</a>
                 
 
              </div>
