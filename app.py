@@ -327,7 +327,6 @@ def allowed_file3(filename):
 #end
 
 
-
 #contollers
 
 
@@ -519,7 +518,7 @@ def Register2():
 
 
             
-@app.route("/login",methods=['GET', 'POST'])
+@app.route("/login",methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         session.permanent = True       
@@ -1838,7 +1837,7 @@ def download3(filename):
 def download2(filename):
     if "admin" in session:
         user = session["admin"]
-        return send_from_directory(directory='ID_Proof', filename=filename,user=user)
+        return send_from_directory(directory='ID_Proof', filename=filename)
     else:
         return redirect(url_for('relogin'))
 
