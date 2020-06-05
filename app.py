@@ -242,8 +242,7 @@ class Count(db.Model):
         self.Total_request = Total_request
         self.Total_crowd = Total_crowd
         self.Threshhold = Threshhold
-
-        
+      
 #end
 
 def THreshhold():
@@ -253,38 +252,25 @@ def THreshhold():
     return de
 
 
-
-
 #ML Functions
 
 # findface function
+
+
 def find_faces(image,name):
 
     dets = detector(image, 1)
-
     if len(dets) == 0:
-        return np.empty(0), np.empty(0), np.empty(0)
-    if len(dets) > 1:
-        print("Please change image: " + name + " - it has " + str(len(dets)) + " faces; it can only have one")
+        return np.empty(0)
 
-    
-    rects, shapes = [], []
-    shapes_np = np.zeros((len(dets), 68, 2), dtype=np.int)
+    shapes = []
     for k, d in enumerate(dets):
-        rect = ((d.left(), d.top()), (d.right(), d.bottom()))
-        rects.append(rect)
-
-        shape = sp(image, d)
         
-       
-        for i in range(0, 68):
-            shapes_np[k][i] = (shape.part(i).x, shape.part(i).y)
-
+        shape = sp(image, d)
         shapes.append(shape)
         
-    return rects, shapes, shapes_np
+    return shapes
 #end
-
 
 # encode face function
 def encode_faces(img, shapes):
@@ -295,6 +281,11 @@ def encode_faces(img, shapes):
 
     return np.array(face_descriptors)
 
+
+writer = None
+
+
+#end of class face_reco
 # convert to time format
 def convert(seconds): 
     seconds = seconds % (24 * 3600) 
@@ -323,14 +314,9 @@ def allowed_file3(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWEDID_EXTENSIONS
 
 #end
-
 #end
 
-
 #contollers
-
-
-
 #INdex page
 
 
@@ -359,7 +345,6 @@ def relogin():
 def mailactivation():
     
     return '<html><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"><center><div class="card text-white bg-info" style="max-width: 80em;"><div class="card-header"><h1>Please Confirm Your Email Address</h1></div><div class="card-body"><br><p class="card-text">We have sent an email with a confirmation link to your email address. In order to complete the sign-up process, please click the confirmation link.<br><br>If you do not receive a confirmation email, please check your spam folder. Also, please verify that you entered a valid email address in our sign-up form.</p><br><br></div> </div><br><br><div class="card text-white bg-info" style="max-width: 80em;"><div class="card-header"><br><h4>Your Documents are sent to admin for Verification.After verification your account will be activated.<BR> Please wait for the account activation mail</h4></p><br><br></div></html>'
-
 
 
 @app.route('/register', methods=['GET','POST'])
@@ -427,7 +412,6 @@ def Register():
             flash('Username or Email already taken,try somethig else','error')
             return redirect(url_for('error'))
              
-
             
 
 @app.route('/confirm_email/<token>')
@@ -452,6 +436,7 @@ def confirm_email(token):
         
     else:
         return '<h1>Mail not Found!</h1>'
+
 
 @app.route('/reg_official', methods=['GET','POST'])
 def Register2():
@@ -516,7 +501,6 @@ def Register2():
             return redirect(url_for('error'))
         
 
-
             
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -576,7 +560,6 @@ def login():
 
             
 #end
-
 
 # Current page 
 
@@ -718,6 +701,7 @@ def profileupdate():
          return typeid
     else:
       return redirect(url_for('relogin'))
+
 
 
 @app.route('/user/update/password', methods=['POST'])
@@ -936,7 +920,7 @@ def train():
                 print("Please change image: " + myimages[i] + " - it has " + str(len(detector(image, 1))) + " faces; it can only have one")
                 return redirect(url_for('current'))
 
-            _ ,img_shapes, _ = find_faces(image,myimages[i])
+            img_shapes = find_faces(image, myimages[i])
             descs[i] = encode_faces(image, img_shapes)[0]
         if request.form['action'] == 'Request_Video':
 
@@ -1020,8 +1004,8 @@ def train():
                     video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
                     output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-                    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-                    writer = cv2.VideoWriter('result/'+ session["user"] +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+                    fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+                    writer = cv2.VideoWriter('result/'+ session["user"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS),output_size)
                     m=-1
                     i=1
                     s=0
@@ -1101,12 +1085,12 @@ def train():
         
             _, img_bgr = cap.read()
             padding_size = 0
-            resized_width = 1360
+            resized_width = 1920
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter('result/'+ session["user"] +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            writer = cv2.VideoWriter('result/'+ session["user"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1500,7 +1484,7 @@ def  reatimevideo1():
                 print("Please change image: " + myimages[i] + " - it has " + str(len(detector(image, 1))) + " faces; it can only have one")
                 return redirect(url_for('thirddashboard'))
 
-            _ ,img_shapes, _ = find_faces(image,myimages[i])
+            img_shapes = find_faces(image,myimages[i])
             descs[i] = encode_faces(image, img_shapes)[0]
         
         np.save('train/descs.npy', descs)
@@ -1514,12 +1498,12 @@ def  reatimevideo1():
         
         _, img_bgr = cap.read()
         padding_size = 0
-        resized_width = 1360
+        resized_width = 1920
         video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
         output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        writer = cv2.VideoWriter('result/'+ session["third"] +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+        writer = cv2.VideoWriter('result/'+ session["third"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
         m=-1
         i=1
         s=0
@@ -1708,8 +1692,9 @@ def  processing(uname):
             resized_width = 1920
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
-            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter('result/'+ uname +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            writer = cv2.VideoWriter('result/'+ uname +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
