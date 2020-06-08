@@ -188,11 +188,14 @@ htm = `
 			</div>		
 					
 			<div class="row">
-			<div class="form-group"><br>
-			<label class=" control-label" for="filebutton"><b>Upload Any proof &nbsp;<span style="color: red;">*</span></b></label>
-			<div class="col-xs-12 col-sm-6 col-md-9">
-			<input name="idproof" class="input-file" id="filebutton" type="file" accept=".jpg,.jpeg,.pdf,.png" required>
+			<div class="form-group col-xs-12 col-sm-6">
+			<label><b>Reason &nbsp;<span style="color: red;">*</span></b></label>
+			<textarea name="reason" placeholder="Enter Reason here.." rows="3" class="form-control"  title="It contains Alphabets only"  required/></textarea>
 			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-9">
+			<label class=" control-label" for="filebutton"><b>Upload Any proof &nbsp;<span style="color: red;">*</span></b></label>
+			<input name="idproof" class="input-file" id="filebutton" type="file" accept=".jpg,.jpeg,.pdf,.png" required>
 			</div>
 			</div>
 		</div>

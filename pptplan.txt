@@ -1,0 +1,112 @@
+	
+		
+							 Project- PPT 
+
+
+
+
+1) Introduction 						(vidhya)				---(complete)
+
+
+2) problem statement 						(vidhya) 				---(complete)
+
+
+3) Literature Survey 						(vidhya) 				---()
+
+
+4) Requirement Analysis 					(vidhya) 				---(complete)
+
+
+5) Dlib 							(surej) 				---(complete)
+
+
+6) Map to the best						(surej)				---(complete)
+
+
+7) Why dlib 							(surej)				---(complete)
+
+
+8) HOG 							(vidhya)				---()
+
+
+9) HOG vs Haar 						(vidhya)				---()
+
+
+10) face detection phase 					(vidhya)				---()
+	
+	1) HOG
+	
+11) face reoginition phase 					(vidhya)				---()
+
+	1)facial landmark
+	2)descriptor value
+	3)eucliden distance
+	4)result
+
+12) Types of Users 						(surej)				---(complete)
+	
+	1)Ordinary or Authority
+	2)Thirdparty
+	3)Admin or superadmin
+
+13) Web design 						(arjun)				---(complete)
+
+	1)UI UX design of Index page
+	2)UI UX design of User dashboard
+	3)UI UX desgin of ThirdParty dashboard
+	4)UI UX design of Admin dashboard
+
+
+14) Database design 						(shahana)				---()
+
+	1)ER diagram
+	2)Tables with description
+
+15) User Processes 						(surej)				---()
+	
+	1)User creation and login
+	2)User Operations
+	3)User Result
+	
+16) Third Party Process 					(surej)				---()
+	
+	1)Thirdparty Creation and login
+	2)Third party Operations
+
+17) Admin Process 						(vidhya)				---()
+	
+	1)Admin Creation and login
+	2)Admin Operation
+	3)Super admin features
+	
+18) Additional Features 					(vidhya)				---()
+
+	1)crowd counting
+	2)mask detection
+	3)criminals detections
+
+19) Policys and security measures of website 			(surej)				---()
+
+	1)password security
+	2)user verification (by email and admin)
+	3)ID Proof
+	4)other security measures of website
+	
+20) Work division among group members 			(vidhya)				---()
+
+	1)Percentage of contribution and time taken
+	
+21) Limitations and Disadvantages of the Project 		(vidhya)				---()
+
+
+22) Future scope						(vidhya)				---(complete)
+
+
+23) conclusion 						(vidhya)				---(complete)
+
+
+24) Thank you							(vidhya)				---(complete)
+	
+
+	
+

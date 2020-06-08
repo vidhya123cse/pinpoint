@@ -140,11 +140,12 @@ class Ordinary(db.Model):
     proof=db.Column(db.String(40))
     address=db.Column(db.String(50))
     zip = db.Column(db.Integer)
+    reason=db.Column(db.String(150))
     confirm=db.Column(db.Boolean,unique=False, default=False)
     usr_name = db.Column(db.String, db.ForeignKey('User.username'),nullable=False)
     
 
-    def __init__(self,usr_name,fname,lname,phone,state,city,address,zip,proof,confirm):
+    def __init__(self,usr_name,fname,lname,phone,state,city,address,reason,zip,proof,confirm):
         self.usr_name=usr_name
         self.fname=fname
         self.lname=lname
@@ -154,6 +155,7 @@ class Ordinary(db.Model):
         self.address=address
         self.city=city
         self.zip=zip
+        self.reason=reason
         self.confirm=confirm
 
 
@@ -360,6 +362,7 @@ def Register():
          address = request.form['address']
          state = request.form.get('state')
          city = request.form.get('city')
+         reason = request.form['reason']
          zip = request.form['zipcode']
          file1 = request.files['idproof']
          proof = file1.filename
@@ -379,7 +382,7 @@ def Register():
                     file1.save(os.path.join(app.config['IDPROOF_FOLDER'], filename))
 
                 ord = Ordinary(fname = fname, lname = lname, phone = phone, state = state,
-                city = city,proof = filename, address = address, zip = zip, usr_name = username,confirm=0)
+                city = city,proof = filename, address = address, zip = zip, reason = reason, usr_name = username,confirm=0)
                 db.session.add(ord)
 
                 other = Other(admin_approval = 'no', admin_id = '', no_video_upload = 0, no_of_video_request = 0, 
