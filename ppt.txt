@@ -1,0 +1,84 @@
+	
+		
+						Project- PPT 
+							 
+
+
+	Content					  	  who to present
+
+
+
+1) Introduction 							()				
+
+
+2) problem statement 							() 			
+
+
+3) Literature Survey 							() 			
+
+
+4) Requirement Analysis 						() 			
+
+
+5) Dlib 								() 				
+
+
+6) Map to the best							()			
+
+
+7) Why dlib 								()			
+
+
+8) HOG 								()				
+
+
+9) HOG vs Haar 							()				
+
+
+10) face detection phase 						()				
+	
+	
+11) face reoginition phase 						()			
+
+	
+12) Types of Users 							()				
+	
+	
+13) Web design 							()			
+
+
+14) Database design 							()				
+
+
+15) User Processes 							()				
+	
+	
+16) Third Party Process 						()			
+	
+	
+17) Admin Process 							()				
+		
+	
+18) Additional Features 						()				
+
+
+19) Policys and security measures of website 				()				
+
+	
+20) Work division among group members 				()				
+
+	
+21) Limitations and Disadvantages of the Project 			()				
+
+
+22) Future scope							()			
+
+
+23) conclusion 							()				
+
+
+24) Thank you								()			
+	
+
+	
+

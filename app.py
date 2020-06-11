@@ -1066,7 +1066,7 @@ def train():
                     db.session.commit()
                     
 
-                    return render_template('base/output.html',success = success, time = time,user = session["user"] )
+                    return render_template('base/output.html',success = success, time = time,s=s,user = session["user"] )
 
             else:
                 flash('Only one video can upload','error')
@@ -1153,7 +1153,7 @@ def train():
 
             db.session.commit()
 
-            return render_template('base/output.html',success = success, time = time,user = session["user"])
+            return render_template('base/output.html',success = success, time = time,s=s,user = session["user"])
 
         
     else:

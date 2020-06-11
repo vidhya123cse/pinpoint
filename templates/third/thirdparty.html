@@ -190,11 +190,6 @@
                        <td> {{ user.usr_name }}</td> 
                        <td>
                         <button href="" id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">view</button>
-                      
-
-
-                  
-
                       </tr>
     
             <!-- Modal Edit user-->
@@ -205,39 +200,23 @@
 
 
 <div class="modal-content">
-
-
   <div class="modal-header">
-
-
      <h4 class="modal-title">Request Information</h4>
-
-
   </div>
   <form action="/thirdparty/pendinguser" method="POST" enctype="multipart/form-data">
 
   <div class="modal-body" >
-
-
-     
-
-    
         <div class="form-group">
 
 
            <label  style= "color:#343a40"  >Date: {{ user.date }} </label>
             
         </div>
-
-
-
         <div class="form-group">
-
 
            <label  style= "color:#343a40">Start Time: {{ user.start_time }}</label>
             <br>
            <label  style= "color:#343a40">End Time: {{ user.end_time }}</label>
-
 
         </div>
 
@@ -248,7 +227,6 @@
           <label  style= "color:#343a40">Enter Your Response:</label>
           <input type ="text" name="response" style= "color:#343a40" class="form-control" placeholder="Enter Your Feedback" required/>
         </div> 
-
 
   <div class="modal-footer">
 
@@ -271,12 +249,9 @@
 </div>
   </div>
 
-
-
 <div  id="liverecord" style="display: none; margin-top: 100px;">
 
   <!-- Navbar -->
-
   <div class="content">
     <div class="container-fluid">
       <div class="card">
@@ -285,33 +260,30 @@
           <p class="card-category"> Maximum 2 images can be input. Video is taken as realtime</p>
         </div>
         <div class="card-body">
-         <br><center>
-            
-             <!-- <div class="col-md-8" id ="mass" style="background-color: lightblue;"></div> -->
-           
+         <br>
+        <center>
             <br>
-             
               <form class="md-form" method="POST" action="/thirdparty/realtimevideo" enctype="multipart/form-data">
                 <div class="file-field">
                   <div class="btn btn-primary float-centre" >
                     <span>Choose file</span>
                     <input type="file"  id ="livefile" name="livefile" accept=".jpg,.jpeg" multiple required>
                   </div>
-                  <br><br><div class="text-center">
+                  <br><br>
+                  <div class="text-center">
                   <button type="submit" name="subm" value="submit" class="btn btn-primary" style="background-color:#2dc997;"> Start Realtime Video Processing</button>
                <button type="reset" class="btn btn-danger" > Reset The Field 
-                        </button>  <br><br></div>
-                      </div>
-             
-              </form>
-              </div>
-            </center>     
-              
-
-</div></div></div></div>
-   
-
-
+              </button>  <br><br>
+            </div>
+          </div>
+        </form>
+      </div>
+    </center>                  
+</div
+></div>
+</div>
+</div>
+  
 {% endblock %}
 
 
