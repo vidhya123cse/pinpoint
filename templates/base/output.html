@@ -1,6 +1,5 @@
 {% extends 'base/base.html' %}
 
-
 {% block navbar %}
       <nav id="nav-menu-container">
         <ul class="nav-menu pull-right">
@@ -35,27 +34,41 @@
 {% endif %}
 <br><br>
 
-{% if s %}
-<div style="margin:50px">
-  <h3><b>Found Target</b></h3>
-<h3>The Time At Which Target locked :<b style = "color: red;">{{ time }}</b></h3>
-<center>Click to &nbsp; <a href="/user/current"class="btn btn-primary" type="submit"><b>Redirect</b></a></center>
-</div>
-{% endif %}
-<section id="tick" style="margin-bottom:10%;"><center>
-  <div class="container" style="margin-top: 100px;border-color:green; border-radius: 10px;border-style: solid; max-width: 40%; min-width: 300px;">
-    <div class="container wow fadeInUp">
-           
-            <div class="pic"><img src="{{ url_for('static',filename = 'img/tick.png')}}" alt="" height="200" width="130">
-            
+        
+<center>
+<div class="card card-nav-tabs text-center"  style="margin-top: 20px;border-color:green;border-radius: 10px;border-style: solid; max-width: 50%; min-width: 300px;" >
+  <div class="card-header card-header-primary">
+   <h2>Your video is ready</h2> 
+  </div>
+  <div class="card-body" style="background-color:azure;">
+    <h4 class="card-title">
+      {% if s %}
+      <div style="margin:50px">
+      <h4>The Time At Which Target locked :<b style = "color: red;">{{ time }}</b></h4>
+       <h4><b>Found</b></h4>
+      </div>
+      {% else %}
+      <div style="margin:50px">
+      <h4><b>Not Found</b></h4>
+      </div>
+      {% endif %}
+      <section id="tick" style="margin-bottom:5%;">
+          <div class="container wow fadeInUp">
+                 
+                  <div class="pic"><img src="{{ url_for('static',filename = 'img/tick.png')}}" alt="" height="50" width="50">
+                  
+                </div>
+                <br>
+                <video width ="550" controls>
+                  <iframe src="/result/{{user}}.mp4" type="video/avi">
+                    Your browser not supported
+                  </iframe> <br><br>
+         Please download the video 
           </div>
-             
-            <b> Please download the video </b>
-          
-
-        <br>
+       
+        
             <br>
-            <a type="button" class="btn btn-square btn-success" href="/user/result/{{user}}.avi" download style="margin-right: 5px; background-color:green;">Download video </a>
+            <a type="button" class="btn btn-square btn-success" href="/user/result/{{user}}.mp4" download style="margin-right: 5px; background-color:green;">Download video </a>
         
         </div>
       </div>

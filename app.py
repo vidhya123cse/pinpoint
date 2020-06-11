@@ -422,7 +422,7 @@ def confirm_email(token):
     try:
         email = s.loads(token, salt='email-confirm', max_age=172800)
     except SignatureExpired:
-        return '<h1>The link is expired!</h1>'
+        return render_template('back.html',email2 = 1)
     use = User.query.filter_by(mail=email).first()
     if use:
         print(use.type)
@@ -438,7 +438,7 @@ def confirm_email(token):
         return '<h1>Your email is verifed!</h1>'
         
     else:
-        return '<h1>Mail not Found!</h1>'
+        return render_template('back.html',email1 = 1)
 
 
 @app.route('/reg_official', methods=['GET','POST'])
@@ -519,7 +519,7 @@ def login():
         if login:
             
             if login.hash == "rejected":
-                return 'Rejected by the Admin'
+                return render_template('back.html',adminrej = 1)
 
             if login.type == 'Admin':
                 session["admin"] = uname
@@ -533,18 +533,18 @@ def login():
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
                     if oth.admin_approval == "no":
-                        return 'not verified by admin'
+                        return render_template('back.html',adminver = 1)
                     if oth.admin_approval == "reject":
-                        return 'Rejected by the Admin'
+                        return render_template('back.html',adminrej = 1)
                 
                 if login.type == 'Authority':
                     con = Authority.query.filter_by(usr_name=uname).first()
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
                     if oth.admin_approval == "no":
-                        return 'not verified by admin'
+                        return render_template('back.html',adminver = 1)
                     if oth.admin_approval == "reject":
-                        return 'Rejected by the Admin'
+                        return render_template('back.html',adminrej = 1)
 
 
                 session["user"] = uname
@@ -1007,8 +1007,8 @@ def train():
                     video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
                     output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-                    fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-                    writer = cv2.VideoWriter('result/'+ session["user"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS),output_size)
+                    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+                    writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS),output_size)
                     m=-1
                     i=1
                     s=0
@@ -1064,7 +1064,22 @@ def train():
                     db.session.add(count)
 
                     db.session.commit()
-                    
+
+
+                    cap = cv2.VideoCapture('result/'+'test'+'.mp4')
+
+                    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+                    out = cv2.VideoWriter('result/'+session["user"]+'.mp4',fourcc,5,(1280,720))
+                    while True:
+                        ret, frame = cap.read()
+                        if  ret == True:
+                            b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
+                            out.write(b)
+                        else:
+                            break
+
+                    cap.release()
+                    writer.release()
 
                     return render_template('base/output.html',success = success, time = time,s=s,user = session["user"] )
 
@@ -1092,8 +1107,8 @@ def train():
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-            writer = cv2.VideoWriter('result/'+ session["user"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1152,6 +1167,22 @@ def train():
             db.session.add(count)
 
             db.session.commit()
+
+            cap = cv2.VideoCapture('result/'+'test'+'.mp4')
+
+            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            out = cv2.VideoWriter('result/'+session["user"]+'.mp4',fourcc,5,(1280,720))
+            while True:
+                ret, frame = cap.read()
+                if  ret == True:
+                    b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
+                    out.write(b)
+                else:
+                    break
+
+            cap.release()
+            writer.release()
+
 
             return render_template('base/output.html',success = success, time = time,s=s,user = session["user"])
 
@@ -1505,8 +1536,8 @@ def  reatimevideo1():
         video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
         output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-        writer = cv2.VideoWriter('result/'+ session["third"] +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
         m=-1
         i=1
         s=0
@@ -1560,6 +1591,22 @@ def  reatimevideo1():
         count.Total_Real = count.Total_Real + 1
         db.session.add(count)
         db.session.commit()
+
+        cap = cv2.VideoCapture('result/'+'test'+'.mp4')
+
+        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        out = cv2.VideoWriter('result/'+session["third"]+'.mp4',fourcc,5,(1280,720))
+        while True:
+            ret, frame = cap.read()
+            if  ret == True:
+                b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
+                out.write(b)
+            else:
+                break
+
+        cap.release()
+        writer.release()                              
+
 
         flash("You have successfully Processed the Video",'success3')
         return redirect(url_for('thirddashboard'))
@@ -1696,8 +1743,8 @@ def  processing(uname):
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
-            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-            writer = cv2.VideoWriter('result/'+ uname +'.avi', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1760,6 +1807,22 @@ def  processing(uname):
             db.session.add(count)
 
             db.session.commit()
+
+            cap = cv2.VideoCapture('result/'+'test'+'.mp4')
+
+            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            out = cv2.VideoWriter('result/'+uname+'.mp4',fourcc,5,(1280,720))
+            while True:
+                ret, frame = cap.read()
+                if  ret == True:
+                    b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
+                    out.write(b)
+                else:
+                    break
+
+            cap.release()
+            writer.release()
+
             user1 = User.query.filter_by(username = uname).first()
             email = user1.mail
 
