@@ -1,5 +1,66 @@
 {% extends 'admin/base.html' %}
 
+{% block navbar %}
+
+<ul class="nav">
+  <li class="nav-item active ">
+    <a class="nav-link " href="/Admin">
+      <i class="material-icons">dashboard</i>
+      <p>Dashboard</p>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/Admin/user">
+      <i class="material-icons">accessibility</i>
+      <p>Verify User</p>
+    </a>
+  </li>
+
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/third_party">
+      <i class="material-icons">add_circle</i>
+      <p>Add a Third Party</p>
+    </a>
+  </li>
+  {% if user == 'SuperAdmin' %}
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/add_admin">
+      <i class="material-icons">add_circle</i>
+      <p>Add an Admin</p>
+    </a>
+  </li>
+  {% endif %}
+
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/process">
+      <i class="material-icons">update</i>
+      <p>Third Party's Response </p>
+    </a>
+  </li>
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/remove_user">
+      <i class="material-icons">content_cut</i>
+      <p>Remove Users</p>
+    </a>
+  </li>
+  {% if user == 'SuperAdmin' %}
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/threshold">
+      <i class="material-icons">update</i>
+      <p>Change Threshold Value </p>
+    </a>
+  </li>
+  <li class="nav-item ">
+    <a class="nav-link" href="/Admin/cleanup">
+      <i class="material-icons">update</i>
+      <p>Clean Up </p>
+    </a>
+  </li>
+  {% endif %}
+  
+  
+</ul>
+{% endblock %}
 
 
 {% block body %}

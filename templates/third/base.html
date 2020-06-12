@@ -34,7 +34,6 @@
     </style>
 
 
-
   <script>
 
 
@@ -52,10 +51,10 @@ function PendingUsers()
   $("#updatediv").hide();
   $("#liverecord").hide();  
   $("#editprofile").hide();
+  $("#crowdcount").hide();
   document.getElementById("pending").style.display = 'block';
   $("#pending").show();
-
-
+  
 }
 
 function Liverecording()
@@ -63,8 +62,20 @@ function Liverecording()
   $("#updatediv").hide(); 
   $("#pending").hide(); 
   $("#editprofile").hide();
+  $("#crowdcount").hide();
   document.getElementById("liverecord").style.display = 'block';
   $("#liverecord").show();
+
+}
+
+function Crowdcount()
+{
+  $("#updatediv").hide(); 
+  $("#pending").hide(); 
+  $("#editprofile").hide();
+  $("#liverecord").hide();
+  document.getElementById("crowdcount").style.display = 'block';
+  $("#crowdcount").show();
 
 }
 
@@ -75,6 +86,7 @@ function UpdatePassword()
   $("#pending").hide();
   $("#liverecord").hide();
   $("#editprofile").hide();
+  $("#crowdcount").hide();
   document.getElementById("updatediv").style.display = 'block';
   $("#updatediv").show();
 }
@@ -84,13 +96,10 @@ function Updateprofile()
   $("#pending").hide();
   $("#liverecord").hide();
   $("#updatediv").hide(); 
+  $("#crowdcount").hide();
   document.getElementById("editprofile").style.display = 'block';
   $("#editprofile").show();
 }
-
-
-
-
 
 function Reject()
 {
@@ -108,16 +117,11 @@ function editprofile()
   document.getElementById("phone").readOnly = false;
 
   document.getElementById("okbutton").disabled = false;
-
-
   document.getElementById("message").style.display = "block";
   window.setTimeout("document.getElementById('message').style.display='none';",5000);
 
 }
   </script>
-
-
-
 
 </head>
 
@@ -130,25 +134,31 @@ function editprofile()
             PINPOINT THIRD PARTY
           </a>
         </div>
-        <div class="sidebar-wrapper">
+        <div class="sidebar-wrapper" id="menu">
           <ul class="nav">
-            <li class="nav-item active ">
+            <li class="nav-item" id ="dash">
               <a class="nav-link " href="/thirdparty">
                 <i class="material-icons">dashboard</i>
                 <p>Dashboard</p>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="pend">
               <a class="nav-link" href="#pending" onclick="PendingUsers();">
                 <i class="material-icons">accessibility</i>
                 <p>Pending Users</p>
               </a>
             </li>
           
-            <li class="nav-item ">
+            <li class="nav-item " id="live">
               <a class="nav-link" href="#liverecord" onclick="Liverecording();">
                 <i class="material-icons">add_circle</i>
                 <p>Realtime Video</p>
+              </a>
+            </li>
+            <li class="nav-item " id="crowd">
+              <a class="nav-link" href="#crowdcount" onclick="Crowdcount();">
+                <i class="material-icons">add_circle</i>
+                <p>Crowd count</p>
               </a>
             </li>
           </ul>

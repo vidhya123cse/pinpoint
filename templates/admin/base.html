@@ -48,7 +48,7 @@ function editprofile()
 <body class="dark-edition">
   <body class="dark-edition">
     <div class="wrapper ">
-      <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-2.jpg">
+      <div class="sidebar" data-color="purple" data-background-color="black" data-image ='https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg'>
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
   
@@ -57,65 +57,11 @@ function editprofile()
         <div class="logo"><a href="/Admin" class="simple-text logo-normal">
             PINPOINT ADMIN
           </a></div>
+        
         <div class="sidebar-wrapper">
-          <ul class="nav">
-            <li class="nav-item active ">
-              <a class="nav-link " href="/Admin">
-                <i class="material-icons">dashboard</i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Admin/user">
-                <i class="material-icons">accessibility</i>
-                <p>Verify User</p>
-              </a>
-            </li>
-          
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/third_party">
-                <i class="material-icons">add_circle</i>
-                <p>Add a Third Party</p>
-              </a>
-            </li>
-            {% if user == 'SuperAdmin' %}
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/add_admin">
-                <i class="material-icons">add_circle</i>
-                <p>Add an Admin</p>
-              </a>
-            </li>
-            {% endif %}
-
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/process">
-                <i class="material-icons">update</i>
-                <p>Third Party's Response </p>
-              </a>
-            </li>
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/remove_user">
-                <i class="material-icons">content_cut</i>
-                <p>Remove Users</p>
-              </a>
-            </li>
-            {% if user == 'SuperAdmin' %}
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/threshold">
-                <i class="material-icons">update</i>
-                <p>Change Threshold Value </p>
-              </a>
-            </li>
-            <li class="nav-item ">
-              <a class="nav-link" href="/Admin/cleanup">
-                <i class="material-icons">update</i>
-                <p>Clean Up </p>
-              </a>
-            </li>
-            {% endif %}
-            
-            
-          </ul>
+          {% block navbar %}
+         
+          {% endblock %}
         </div>
       </div>
     <div class="main-panel">

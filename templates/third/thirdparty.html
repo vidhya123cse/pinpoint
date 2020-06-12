@@ -113,6 +113,90 @@
       
       </script>
       {% endif %}
+
+      {% if category =='successcrowd' %}
+
+<style type="text/css">
+.modal-confirm {		
+		color: #434e65;
+		width: 525px;
+	}
+	.modal-confirm .modal-content {
+		padding: 20px;
+		font-size: 16px;
+		border-radius: 5px;
+		border: none;
+	}
+	.modal-confirm .modal-header {
+		background: #e85e6c;
+		border-bottom: none;   
+        position: relative;
+		text-align: center;
+		margin: -20px -20px 0;
+		border-radius: 5px 5px 0 0;
+		padding: 35px;
+	}
+	.modal-confirm h4 {
+		text-align: center;
+		font-size: 36px;
+		margin: 10px 0;
+	}
+	.modal-confirm .form-control, .modal-confirm .btn {
+		min-height: 40px;
+		border-radius: 3px; 
+	}
+	.modal-confirm .close {
+    position: absolute;
+		top: 15px;
+		right: 15px;
+		color: #fff;
+		text-shadow: none;
+		opacity: 0.5;
+	}
+	.modal-confirm .close:hover {
+		opacity: 0.8;
+	}
+	.modal-confirm .icon-box {
+		color: #fff;		
+		width: 95px;
+		height: 95px;
+		display: inline-block;
+		border-radius: 50%;
+		z-index: 9;
+		border: 5px solid #fff;
+		padding: 15px;
+		text-align: center;
+	}
+	.modal-confirm .icon-box i {
+		font-size: 58px;
+		margin: -2px 0 0 -2px;
+	}
+	.modal-confirm.modal-dialog {
+		margin-top: 80px;
+	}
+</style>
+      <div id="myModal">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="icon-box">
+                <i class="material-icons">&#xE5CD;</i>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                      <h4>Ooops!</h4>	
+                      
+                      {{message}}  <br>The crowd limit <b>exceeded</b></p>
+            </div>
+          </div>
+        </div>
+      </div>     
+      <script>
+        window.setTimeout("document.getElementById('myModal').style.display='none';",3000);
+      </script>
+      
+      {% endif %}
          
 
         
@@ -283,6 +367,42 @@
 ></div>
 </div>
 </div>
+
+
+<div  id="crowdcount" style="display: none; margin-top: 100px;">
+
+<div class="card-header card-header-primary">
+  <h4 class="card-title">Crowd Count</h4>
+  <p class="card-category">You can count Number of faces in crowd</p></div>
+  <div class="card-body">
+    <form method="POST" action="/thirdparty/crowdcount" enctype="multipart/form-data">
+    <p class="card-category" ><b style="color: aliceblue;">First set the limit</b></p>
+    <div class="form-group">
+      <input type="range" min="0" max="100" value="0" class="slider" name = "limit" id="myRange" step="1" required>
+      <p style="color: aliceblue;">Value: <span id="demo"></span></p>
+    </div>
+    <br>
+    <input type="file" name="inputvideo" accept=".mp4"/>
+    <br><br>
+    
+    <br>
+    <button  class="btn btn-primary" type="submit" name="action" value="real"> Realtime video</button>
+    <button  class="btn btn-primary" type="submit" name="action" value="upload">Upload video</button>
+  </form>
+      </div>
+      </div>
+
+      <script>
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+        
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+        }
+        </script>
+
+
   
 {% endblock %}
 

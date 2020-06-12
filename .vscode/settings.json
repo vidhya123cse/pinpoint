@@ -1,6 +1,11 @@
+
+
 {
     "python.linting.pylintArgs": [
         "--load-plugins",
         "pylint-flask"
-    ]
+    ],
+    "editor.tabsize":4,
+    "editor.insertSpaces":true,
+    "editor.detectIndentation":true
 }

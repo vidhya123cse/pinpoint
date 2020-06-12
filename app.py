@@ -10,6 +10,7 @@ from random import seed
 import random
 from random import randint
 import dlib,cv2
+import face_recognition
 import numpy as np
 import os
 import hashlib
@@ -1616,6 +1617,92 @@ def  reatimevideo1():
         exit()
   else:
       return redirect(url_for('relogin'))
+
+
+
+@app.route('/thirdparty/crowdcount',methods=['POST'])
+def crowdcount():
+    if "third" in session:
+        if request.method == 'POST':
+
+            limit = request.form['limit']
+            if request.form['action'] == "upload":
+
+                file = request.files['inputvideo']
+                if not allowed_file2(file.filename):
+                    flash('Invalid Video Format ;Only Mp4 Supported','errorvideo')
+                    print("Invalid Video Format ;Only Mp4 Supported")
+                    return redirect(url_for('thirddashboard'))
+                file.filename = session["third"] + ".mp4"
+                print(file.filename)
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_VIDEO'], filename))
+
+                video_path = 'video/'+ file.filename
+                print(video_path)
+                cap = cv2.VideoCapture(video_path)
+                if not cap.isOpened():
+                    flash('Video cannot open','errorcamera')
+                    print("Video cannot open")
+                    return redirect(url_for('thirddashboard'))
+
+            if request.form['action'] == "real":
+            
+                video_path = 0
+                cap = cv2.VideoCapture(video_path)
+                if not cap.isOpened():
+                    flash('Camera is not working','errorcamera')
+                    print("Camera is not working")
+                    return redirect(url_for('thirddashboard'))
+            _, img_bgr = cap.read() 
+            writer = None
+            W = None
+            H = None
+            c=0
+
+            if W is None or H is None:
+                (H, W) = img_bgr.shape[:2]
+            thresh = 0
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            writer = cv2.VideoWriter('result/output.avi', fourcc, 30, (W, H), True)
+            while True:
+
+                ret, camera = cap.read()
+                if not ret:
+                    break
+                gray = cv2.cvtColor(camera, cv2.COLOR_BGR2RGB)
+                boxes = face_recognition.face_locations(gray, model='hog')
+                for (top, right, bottom, left) in boxes:
+                    cv2.rectangle(camera, (left, top), (right, bottom), (0, 255, 0), 2)
+                writer.write(camera)
+                if len(boxes) > thresh:  
+                        print(len(boxes))
+                        thresh = len(boxes)
+                if thresh >= int(limit):
+                        c = 1
+                        break
+                if request.form['action'] == "real":
+                    cv2.imshow('img', camera)
+                    if cv2.waitKey(1) == ord('q'):
+                        break
+
+            print(thresh)
+            cv2.destroyAllWindows()
+            cap.release()
+            writer.release()
+            if c == 1:
+                flash('Total face count is : '+ str(thresh),'successcrowd')
+                print("Total count : "+ str(thresh))
+            else:
+                flash('Total face count is : '+ str(thresh) + '! Not Exceeded','success')
+                print("Total count : "+ str(thresh))
+            return redirect(url_for('thirddashboard'))
+
+    else:
+        return redirect(url_for('relogin'))
+
+
+
 
 
 #end
