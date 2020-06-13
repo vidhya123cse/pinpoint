@@ -1,0 +1,79 @@
+	Arjun K Jayan ->
+
+		1) Front Page 
+		2) User Signup (Both Ordinary and Officals)
+		3) Email verification
+		4) Login
+		5) Forgot password
+	
+		
+			Tables Used-  User,Ordinary,Authority,Other 
+			
+			
+			
+			
+		
+		
+	Surej Mohan ->
+		
+		1) User or Authority Dashboard
+		2) 3 functions	- Realtime video processing
+			      	- Uploaded video  processing
+			      	- Request for video
+			 
+			 Dlib and Opencv is used for for processing input image and video.
+		3) User Edit profile,password,username,delete account
+		
+			Tables used-	User,Ordinary,Authority,Other
+			
+			
+			
+			
+	Shahana Samad ->
+		
+		1) ThirdParty Dashboard
+		2) 2 functions	- Realtime video processing
+			  	- Accept or reject video request
+		3) Thirdparty Edit profile,password,username,delete account
+		4) backend of contact form in the index page
+		
+			Tables used-	User,Thirdparty,Other
+			
+			
+			
+			
+	Vidhya TR ->
+		
+		1) Admin Dashboard
+		2) create two type Admins SuperAdmin and Admin
+		3) Super Admin functions	- Verify Users(Ordinary and Authority)(sent notification)
+						- Add Thirdparty (sent username and password through mail)
+						- Add Admin (sent username and password through mail)
+						- Remove Users( Admin,Ordinary,Authority,Thirdparty)
+						- Process video provid by thirdparty to users (sent mail when video is ready)
+						- Change threshold value
+						- clean up the directories for storing videos and images
+						
+		4)  Admin functions		- Verify Users(Ordinary and Authority)(sent notification)
+						- Add Thirdparty (sent username and password through mail)
+						- Remove Users(Ordinary,Authority,Thirdparty)
+						- Process video provid by thirdparty to users (sent mail when video is ready)
+		
+			Tables used-	User,Ordinary,Authority,Other,Admin
+			      	
+		
+		
+
+	
+
+
+
+
+
+
+
+
+
+
+
+

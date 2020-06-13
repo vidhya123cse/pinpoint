@@ -859,7 +859,7 @@ def delete():
 @app.route('/user/result/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     if "user" in session:
-        return send_from_directory(directory='result', filename=filename)
+        return send_from_directory(directory='static/result', filename=filename)
     else:
       return redirect(url_for('relogin'))
 
@@ -1070,7 +1070,7 @@ def train():
                     cap = cv2.VideoCapture('result/'+'test'+'.mp4')
 
                     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-                    out = cv2.VideoWriter('result/'+session["user"]+'.mp4',fourcc,5,(1280,720))
+                    out = cv2.VideoWriter('static/result/'+session["user"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
                     while True:
                         ret, frame = cap.read()
                         if  ret == True:
@@ -1091,7 +1091,6 @@ def train():
 
 
 
-
         elif request.form['action'] == "ON":
             np.save('train/'+ session["user"] +'.npy', descs)
             descs = np.load('train/'+ session["user"] +'.npy',allow_pickle=True)[()]
@@ -1109,7 +1108,7 @@ def train():
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            writer = cv2.VideoWriter('static/result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1172,7 +1171,7 @@ def train():
             cap = cv2.VideoCapture('result/'+'test'+'.mp4')
 
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            out = cv2.VideoWriter('result/'+session["user"]+'.mp4',fourcc,5,(1280,720))
+            out = cv2.VideoWriter('static/result/'+session["user"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
             while True:
                 ret, frame = cap.read()
                 if  ret == True:
@@ -1184,9 +1183,7 @@ def train():
             cap.release()
             writer.release()
 
-
             return render_template('base/output.html',success = success, time = time,s=s,user = session["user"])
-
         
     else:
         print("Error")
@@ -1221,12 +1218,11 @@ def download5(filename):
         db.session.add(send)
         db.session.commit()
 
-        return send_from_directory(directory='result', filename=filename)
+        return send_from_directory(directory='static/result', filename=filename)
     else:
       return redirect(url_for('relogin'))
 
 #end
-
 
 
 #Thirdparty Page
@@ -1372,7 +1368,7 @@ def edituserthird():
                     return redirect(url_for('thirddashboard'))
 
             else:
-                flash("New Username is not matching",'error')
+                flash("New Username is not Matching",'error')
                 return redirect(url_for('thirddashboard'))
 
     else:
@@ -1407,7 +1403,7 @@ def deletethird():
                 return redirect(url_for('index'))
         
         else: 
-            flash("You have entered Wrong Password",'error')
+            flash("You have Entered Wrong Password",'error')
             return redirect(url_for('thirddashboard'))
 
         return ""
@@ -1596,7 +1592,7 @@ def  reatimevideo1():
         cap = cv2.VideoCapture('result/'+'test'+'.mp4')
 
         fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        out = cv2.VideoWriter('result/'+session["third"]+'.mp4',fourcc,5,(1280,720))
+        out = cv2.VideoWriter('static/result/'+session["third"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
         while True:
             ret, frame = cap.read()
             if  ret == True:
@@ -1700,9 +1696,6 @@ def crowdcount():
 
     else:
         return redirect(url_for('relogin'))
-
-
-
 
 
 #end
@@ -1898,7 +1891,7 @@ def  processing(uname):
             cap = cv2.VideoCapture('result/'+'test'+'.mp4')
 
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            out = cv2.VideoWriter('result/'+uname+'.mp4',fourcc,5,(1280,720))
+            out = cv2.VideoWriter('static/result/'+uname+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
             while True:
                 ret, frame = cap.read()
                 if  ret == True:
