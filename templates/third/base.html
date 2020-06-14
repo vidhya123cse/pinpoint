@@ -52,6 +52,7 @@ function PendingUsers()
   $("#liverecord").hide();  
   $("#editprofile").hide();
   $("#crowdcount").hide();
+  $("#criminal").hide();
   document.getElementById("pending").style.display = 'block';
   $("#pending").show();
   
@@ -63,6 +64,7 @@ function Liverecording()
   $("#pending").hide(); 
   $("#editprofile").hide();
   $("#crowdcount").hide();
+  $("#criminal").hide();
   document.getElementById("liverecord").style.display = 'block';
   $("#liverecord").show();
 
@@ -74,10 +76,25 @@ function Crowdcount()
   $("#pending").hide(); 
   $("#editprofile").hide();
   $("#liverecord").hide();
+  $("#criminal").hide();
   document.getElementById("crowdcount").style.display = 'block';
   $("#crowdcount").show();
 
 }
+
+
+function Criminal()
+{
+  $("#updatediv").hide(); 
+  $("#pending").hide(); 
+  $("#editprofile").hide();
+  $("#liverecord").hide();
+  $("#crowdcount").hide();
+  document.getElementById("criminal").style.display = 'block';
+  $("#criminal").show();
+
+}
+
 
 
 function UpdatePassword()
@@ -87,6 +104,7 @@ function UpdatePassword()
   $("#liverecord").hide();
   $("#editprofile").hide();
   $("#crowdcount").hide();
+  $("#criminal").hide();
   document.getElementById("updatediv").style.display = 'block';
   $("#updatediv").show();
 }
@@ -97,6 +115,7 @@ function Updateprofile()
   $("#liverecord").hide();
   $("#updatediv").hide(); 
   $("#crowdcount").hide();
+  $("#criminal").hide();
   document.getElementById("editprofile").style.display = 'block';
   $("#editprofile").show();
 }
@@ -159,6 +178,12 @@ function editprofile()
               <a class="nav-link" href="#crowdcount" onclick="Crowdcount();">
                 <i class="material-icons">add_circle</i>
                 <p>Crowd count</p>
+              </a>
+            </li>
+            <li class="nav-item " id="crim">
+              <a class="nav-link" href="#criminal" onclick="Criminal();">
+                <i class="material-icons">add_circle</i>
+                <p>Add Criminal Details</p>
               </a>
             </li>
           </ul>

@@ -16,6 +16,8 @@ import os
 import hashlib
 from flask.helpers import flash, get_flashed_messages, send_from_directory
 from datetime import timedelta
+from converter import Converter
+conv = Converter()
 # seed random number generator
 seed(1)
 # generate some integers
@@ -1004,12 +1006,12 @@ def train():
         
                     _, img_bgr = cap.read()
                     padding_size = 0
-                    resized_width = 1920
+                    resized_width = 1500
                     video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
                     output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
                     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-                    writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS),output_size)
+                    writer = cv2.VideoWriter('static/result/'+session["user"]+'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS),output_size)
                     m=-1
                     i=1
                     s=0
@@ -1065,23 +1067,6 @@ def train():
                     db.session.add(count)
 
                     db.session.commit()
-
-
-                    cap = cv2.VideoCapture('result/'+'test'+'.mp4')
-
-                    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-                    out = cv2.VideoWriter('static/result/'+session["user"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
-                    while True:
-                        ret, frame = cap.read()
-                        if  ret == True:
-                            b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
-                            out.write(b)
-                        else:
-                            break
-
-                    cap.release()
-                    writer.release()
-
                     return render_template('base/output.html',success = success, time = time,s=s,user = session["user"] )
 
             else:
@@ -1103,12 +1088,12 @@ def train():
         
             _, img_bgr = cap.read()
             padding_size = 0
-            resized_width = 1920
+            resized_width = 1500
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter('static/result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            writer = cv2.VideoWriter('static/result/'+session["user"]+'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1167,22 +1152,6 @@ def train():
             db.session.add(count)
 
             db.session.commit()
-
-            cap = cv2.VideoCapture('result/'+'test'+'.mp4')
-
-            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            out = cv2.VideoWriter('static/result/'+session["user"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
-            while True:
-                ret, frame = cap.read()
-                if  ret == True:
-                    b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
-                    out.write(b)
-                else:
-                    break
-
-            cap.release()
-            writer.release()
-
             return render_template('base/output.html',success = success, time = time,s=s,user = session["user"])
         
     else:
@@ -1529,12 +1498,12 @@ def  reatimevideo1():
         
         _, img_bgr = cap.read()
         padding_size = 0
-        resized_width = 1920
+        resized_width = 1500
         video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
         output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
         fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+        writer = cv2.VideoWriter('static/result/'+session["third"]+'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
         m=-1
         i=1
         s=0
@@ -1588,22 +1557,6 @@ def  reatimevideo1():
         count.Total_Real = count.Total_Real + 1
         db.session.add(count)
         db.session.commit()
-
-        cap = cv2.VideoCapture('result/'+'test'+'.mp4')
-
-        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        out = cv2.VideoWriter('static/result/'+session["third"]+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
-        while True:
-            ret, frame = cap.read()
-            if  ret == True:
-                b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
-                out.write(b)
-            else:
-                break
-
-        cap.release()
-        writer.release()                              
-
 
         flash("You have successfully Processed the Video",'success3')
         return redirect(url_for('thirddashboard'))
@@ -1819,12 +1772,12 @@ def  processing(uname):
                 return redirect(url_for('process'))
             _, img_bgr = cap.read()
             padding_size = 0
-            resized_width = 1920
+            resized_width = 1500
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter('result/'+ 'test' +'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+            writer = cv2.VideoWriter('static/result/'+uname+'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
             m=-1
             i=1
             s=0
@@ -1887,22 +1840,7 @@ def  processing(uname):
             db.session.add(count)
 
             db.session.commit()
-
-            cap = cv2.VideoCapture('result/'+'test'+'.mp4')
-
-            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            out = cv2.VideoWriter('static/result/'+uname+'.mp4',fourcc,cap.get(cv2.CAP_PROP_FPS),(1280,720))
-            while True:
-                ret, frame = cap.read()
-                if  ret == True:
-                    b = cv2.resize(frame,(1280,720),fx=0,fy=0,interpolation = cv2.INTER_CUBIC)
-                    out.write(b)
-                else:
-                    break
-
-            cap.release()
-            writer.release()
-
+          
             user1 = User.query.filter_by(username = uname).first()
             email = user1.mail
 
