@@ -371,7 +371,7 @@ def Register():
          proof = file1.filename
          exists = User.query.filter_by(username=username).first()
          emailid = User.query.filter_by(mail=email).first()
-         if not exists or not emailid:
+         if not exists and not emailid:
 
             if(password == confpassword):
                 h = hashlib.md5(password.encode())
@@ -462,7 +462,7 @@ def Register2():
             job = department
         exists = User.query.filter_by(username=username).first()
         emailid = User.query.filter_by(mail=email).first()
-        if not exists or not emailid:
+        if not exists and not emailid:
 
             if(password == confpassword):
                 h = hashlib.md5(password.encode())
@@ -536,18 +536,18 @@ def login():
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
                     if oth.admin_approval == "no":
-                        return render_template('back.html',adminver = 1)
+                        return render_template('base/back.html',adminver = 1)
                     if oth.admin_approval == "reject":
-                        return render_template('back.html',adminrej = 1)
+                        return render_template('base/back.html',adminrej = 1)
                 
                 if login.type == 'Authority':
                     con = Authority.query.filter_by(usr_name=uname).first()
                     if con.confirm == 0:
                         return redirect(url_for('mailactivation'))
                     if oth.admin_approval == "no":
-                        return render_template('back.html',adminver = 1)
+                        return render_template('base/back.html',adminver = 1)
                     if oth.admin_approval == "reject":
-                        return render_template('back.html',adminrej = 1)
+                        return render_template('base/back.html',adminrej = 1)
 
 
                 session["user"] = uname
@@ -2163,7 +2163,7 @@ def register():
             emailid = User.query.filter_by(mail = email).first()
 
 
-            if not exists or not emailid:
+            if not exists and not emailid:
                 
                 v1 = randint(0, 1000)
                 v2 = randint(100, 999)
