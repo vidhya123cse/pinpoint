@@ -32,6 +32,7 @@ UPLOAD_VIDEO = './video'
 DOWNLOAD = './result'
 THIRDVIDEO = './third_video'
 IDPROOF_FOLDER = './ID_Proof'
+CRIMINAL_ID = './static/criminals'
 
 ALLOWEDID_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 ALLOWED_FILEEXTENSIONS = set(['jpg','jpeg'])
@@ -47,6 +48,7 @@ app.config['UPLOAD_VIDEO'] = UPLOAD_VIDEO
 app.config['DOWNLOAD'] = DOWNLOAD
 app.config['THIRDVIDEO'] = THIRDVIDEO
 app.config['IDPROOF_FOLDER'] = IDPROOF_FOLDER
+app.config['CRIMINAL_ID'] = CRIMINAL_ID
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -248,6 +250,24 @@ class Count(db.Model):
         self.Total_crowd = Total_crowd
         self.Threshhold = Threshhold
       
+
+#Criminal table
+class Criminals(db.Model):
+    __tablename__ = 'Criminals'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    name = db.Column(db.String(50))
+    age = db.Column(db.Integer)
+    third_party_id = db.Column(db.String(20))
+    url = db.Column(db.String(30))
+
+
+    def __init__(self, name, age, url, third_party_id):
+        self.name = name
+        self.age = age
+        self.url = url
+        self.third_party_id = third_party_id
+
+
 #end
 
 def THreshhold():
@@ -1006,7 +1026,7 @@ def train():
         
                     _, img_bgr = cap.read()
                     padding_size = 0
-                    resized_width = 1500
+                    resized_width = 2000
                     video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
                     output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
@@ -1016,6 +1036,7 @@ def train():
                     i=1
                     s=0
                     c=1
+                    th = THreshhold()
                     while True:
                         
                         ret, img_bgr = cap.read()
@@ -1030,13 +1051,13 @@ def train():
                             shape = sp(img_rgb, d)
                             face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                            last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255), 'percent': 0}
+                            last_found = {'name': 'unknown', 'dist': th, 'color': (0,0,255), 'percent': 0}
 
                             for name, saved_desc in descs.items():
                                 dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
 
                                 if dist < last_found['dist']:
-                                    perce = (1-dist)*100
+                                    perce =(1-dist)*100
                                     last_found = {'name': "Target", 'dist': dist, 'color': (255,255,255), 'percent': perce}
                                     if dist< c:
                                         c=dist
@@ -1067,7 +1088,7 @@ def train():
                     db.session.add(count)
 
                     db.session.commit()
-                    return render_template('base/output.html',success = success, time = time,s=s,user = session["user"] )
+                    return render_template('base/output.html',success = success,maxacc=maxacc, time = time,s=s,user = session["user"] )
 
             else:
                 flash('Only one video can upload','error')
@@ -1088,7 +1109,7 @@ def train():
         
             _, img_bgr = cap.read()
             padding_size = 0
-            resized_width = 1500
+            resized_width = 2000
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
@@ -1098,6 +1119,7 @@ def train():
             i=1
             s=0
             c=1
+            th = THreshhold()
             while True:
                         
                 ret, img_bgr = cap.read()
@@ -1112,7 +1134,7 @@ def train():
                     shape = sp(img_rgb, d)
                     face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                    last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
+                    last_found = {'name': 'unknown', 'dist': th, 'color': (0,0,255),'percent': 0}
 
                     for name, saved_desc in descs.items():
                         dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1152,7 +1174,7 @@ def train():
             db.session.add(count)
 
             db.session.commit()
-            return render_template('base/output.html',success = success, time = time,s=s,user = session["user"])
+            return render_template('base/output.html',success = success, time = time,maxacc =maxacc, s=s,user = session["user"])
         
     else:
         print("Error")
@@ -1202,19 +1224,21 @@ def  thirddashboard():
   if "third" in session:
     
     all = Other.query.filter_by(third_party_issue_id = session["third"],third_party_pending_order = 'no').all()
+    criminals = (db.session.query(Criminals).filter(Criminals.third_party_id == Third.third_party_id).join(Third,Third.usr_name == session["third"])).all()
     len1 = len(all)
+    print(criminals)
     third = Third.query.filter_by(usr_name = session["third"]).first()
     user1 = User.query.filter_by(username = session["third"]).first()
     email = user1.mail
     if (len1 == 0):
         value = 'None'
         flash("You do not have any Request",'None')
-        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third = third,email=email)
+        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third = third,email=email,criminals = criminals)
 
     else:
         value = 'success'
         flash("You Have " + str(len1) + " Request",'success5')
-        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third=third,email=email)
+        return render_template('third/thirdparty.html',all=all,value = value,user=session["third"],third=third,email=email,criminals = criminals)
     
   else:
       return redirect(url_for('relogin'))
@@ -1382,6 +1406,61 @@ def deletethird():
 
 
 
+@app.route('/thirdparty/addcriminal',methods=['POST'])
+def  AddCriminal():
+
+    if "third" in session:
+
+        if request.method == 'POST':
+
+            file = request.files['inputcriminal']
+            name = request.form['name']
+            age = request.form['age']
+
+            if allowed_file1(file.filename):
+                filename = name + '_' + file.filename
+                file.save(os.path.join(app.config['CRIMINAL_ID'], filename))
+            else:
+                flash("Invalid Input File Format; only jpeg or jpg supported",'error')
+                print("Invalid Input File Format; only jpeg or jpg supported")
+                return redirect(url_for('thirddashboard'))
+
+            third = Third.query.filter_by(usr_name = session["third"]).first()
+            thirdpartyid = third.third_party_id
+
+            use = Criminals(name = name, age = age, url = filename, third_party_id = thirdpartyid)
+            db.session.add(use)
+            db.session.commit() 
+
+            flash("Successfully Saved",'success')
+            return redirect(url_for('thirddashboard'))
+ 
+    else:
+      return redirect(url_for('relogin'))
+
+
+
+@app.route('/thirdparty/deletecriminal/<path:id>')
+
+def  DeleteCriminal(id):
+
+    if "third" in session:
+        delete1 = db.session.query(Criminals).filter(Criminals.id == id).first()
+        ff = Criminals.query.filter_by(id = id).first()
+        f = ff.url
+        os.remove(os.path.join('static/criminals/', f))
+        db.session.delete(delete1)
+        db.session.commit()
+        flash("You have successfully Delete the Criminal",'success')
+        return redirect(url_for('thirddashboard'))
+        
+    else:
+      return redirect(url_for('relogin'))
+
+
+
+
+
 @app.route('/thirdparty/pendinguser',methods=['POST'])
 def  PendingUser():
 
@@ -1498,7 +1577,7 @@ def  reatimevideo1():
         
         _, img_bgr = cap.read()
         padding_size = 0
-        resized_width = 1500
+        resized_width = 2000
         video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
         output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
@@ -1508,6 +1587,7 @@ def  reatimevideo1():
         i=1
         s=0
         c=1
+        th = THreshhold()
         while True:
                         
             ret, img_bgr = cap.read()
@@ -1522,7 +1602,7 @@ def  reatimevideo1():
                 shape = sp(img_rgb, d)
                 face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
+                last_found = {'name': 'unknown', 'dist': th, 'color': (0,0,255),'percent': 0}
 
                 for name, saved_desc in descs.items():
                     dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1772,7 +1852,7 @@ def  processing(uname):
                 return redirect(url_for('process'))
             _, img_bgr = cap.read()
             padding_size = 0
-            resized_width = 1500
+            resized_width = 2000
             video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
             output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
 
@@ -1782,6 +1862,7 @@ def  processing(uname):
             i=1
             s=0
             c=1
+            th = THreshhold()
             while True:
                         
                 ret, img_bgr = cap.read()
@@ -1796,7 +1877,7 @@ def  processing(uname):
                     shape = sp(img_rgb, d)
                     face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
 
-                    last_found = {'name': 'unknown', 'dist': THreshhold(), 'color': (0,0,255),'percent': 0}
+                    last_found = {'name': 'unknown', 'dist': th, 'color': (0,0,255),'percent': 0}
 
                     for name, saved_desc in descs.items():
                         dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
@@ -1832,7 +1913,7 @@ def  processing(uname):
             send.end_time = ''
             send.no_of_video_request = 2
             send.result_time = time
-            send.result_percent = maxacc
+            send.result_percent = str(maxacc)
             db.session.add(send)
 
             count = Count.query.filter_by(id = 1).first()
@@ -1886,7 +1967,7 @@ def sendresponse(username):
 @app.route('/Admin/Processed/result/<path:filename>', methods=['GET', 'POST'])
 def download4(filename):
     if "admin" in session:
-        return send_from_directory(directory='result', filename=filename)
+        return send_from_directory(directory='static/result', filename=filename)
     else:
       return redirect(url_for('relogin'))
 
@@ -2257,50 +2338,53 @@ def thresupdate():
 @app.route('/delete/<string:usr_name>/', methods = ['GET', 'POST'])
 def delete2(usr_name):
     if "admin" in session:
-        user = session["admin"]
+        userh = session["admin"]
         user= User.query.filter(User.username == usr_name).first()
         print(usr_name)
         print(user.type)
-
-        
-        mydata = db.session.query(Admin).filter(Admin.usr_name == usr_name).first()
-
-        my_data2=Ordinary.query.filter(usr_name==usr_name).first()
-
-        my_data3=Third.query.filter(usr_name==usr_name).first()
-
-        my_data4 = Authority.query.filter(usr_name==usr_name).first()
         count = Count.query.filter_by(id = 1).first()
         
 
 
         if user.type == "Admin":
+        
             count.Admin = count.Admin - 1
             db.session.add(count)
+            mydata = db.session.query(Admin).filter(Admin.usr_name == usr_name).first()
             db.session.delete(mydata)
             db.session.delete(user)
 
         elif user.type == "Ordinary":
             count.Ordinary = count.Ordinary - 1
             db.session.add(count)
+            my_data2=Ordinary.query.filter(usr_name==usr_name).first()
             db.session.delete(my_data2)
+            other= Other.query.filter(usr_name == usr_name).first()
             db.session.delete(user)
+            db.session.delete(other)
+
 
         elif user.type == "Third_party":
             count.Third_party = count.Third_party - 1
             db.session.add(count)
+            my_data3=Third.query.filter(usr_name==usr_name).first()
             db.session.delete(my_data3)
             db.session.delete(user)
 
         elif user.type == "Authority":
             count.Authority = count.Authority - 1
             db.session.add(count)
+            my_data4 = Authority.query.filter(usr_name==usr_name).first()
             db.session.delete(my_data4)
+            other= Other.query.filter(usr_name == usr_name).first()
             db.session.delete(user)
+            db.session.delete(other)
+
+
 
         db.session.commit()
         flash("User Deleted Successfully",'success')
-        return redirect(url_for('remove',user=user))
+        return redirect(url_for('remove',user=userh))
     else:
         return redirect(url_for('relogin'))
 
@@ -2401,9 +2485,6 @@ def hashcode(hash):
              return render_template('base/reset.html')
     else:
         return redirect(url_for('index'))
-
-
-
 
 
 

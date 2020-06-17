@@ -282,7 +282,6 @@
 <div id="co"  style="color: black;">
 <div class="modal-dialog">
 
-
 <div class="modal-content">
   <div class="modal-header">
      <h4 class="modal-title">Request Information</h4>
@@ -417,22 +416,38 @@
     <h4 class="card-title">Criminal Detections</h4>
     <p class="card-category">You can add faces of criminals to track them </p></div>
     <div class="card-body">
+      {% if criminals == [] %}
+        <div id ="message4" class="alert alert-danger mb-3" style="max-width: 700px;" role="alert">
+          No criminals registered <br>
+        </div>
+        <script>
+          window.setTimeout("document.getElementById('message4').style.display='none';",5000);
+        
+        </script>
+     
+
+      
 
       <div id="operation1" >
+        {% else %}
         <table class="table table-hover table-dark">
           <tr>
             <th>Id</th>
             <th>Name</th>
             <th>Age</th>
-            <th>check image</th>
+            <th>Check image</th>
+            <th>Delete image</th>
           </tr>
+          {% for user in criminals %}
+
           <tr>
-            <td></td>
-            <td></td> 
-            <td></td> 
-            <td><button id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="modaledit1">view</button></td>
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td> 
+            <td>{{user.age}}</td> 
+            <td><button href="" id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="modaledit{{user.id}}">View</button></td>
+            <td><a href="/thirdparty/deletecriminal/{{user.id}}"  class="btn btn-warning btn-xs">Delete</a></td>
           </tr>
-          <div id="modaledit1" class="modal fade"  role="dialog">
+          <div id="modaledit{{user.id}}" class="modal fade"  role="dialog">
             <div id="co"  style="color: black;">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -440,7 +455,7 @@
                     <h4 class="modal-title">Image</h4>
                   </div>
                   <div class="modal-body">
-                    <img src="">
+                    <img src="{{ url_for('static',filename = 'criminals/'+ user.url)}}">
                     <div class="modal-footer">
                        <button type="button" id = "close" class="btn btn-secondary" data-dismiss="modal">close</button>
                     </div>
@@ -449,16 +464,18 @@
               </div>
             </div>
           </div>
+          {% endfor %}
         </table>
+        {% endif %}
         <button class="btn btn-secondary" onclick="AddCriminal();">Add New Criminal</button>
         <br><br><br>
         <div id="addcriminal" style="display: none;">
-          <form action="" method="POST">
+          <form action="/thirdparty/addcriminal" method="POST" enctype="multipart/form-data">
             <div class="form-control row">
-              <input type="file" accept=".jpg ,.jpeg" name= "inputcriminal">
+              <input type="file" accept=".jpg ,.jpeg" name= "inputcriminal" required>
               <br><br><br>
-              <input type ="text" placeholder="Enter the name" name="name">&nbsp;&nbsp;
-              <input type = "text" placeholder="Enter the Age" name="age">
+              <input type ="text" placeholder="Enter the name" name="name" required>&nbsp;&nbsp;
+              <input type = "text" placeholder="Enter the Age" name="age" required>
               <br><br>
               <button type="submit" class="btn btn-secondary">Submit</button>
               <button type="reset" class="btn btn-danger" onclick="CloseAdd();">Close</button>
@@ -466,6 +483,7 @@
           </form>
         </div>
       </div>
+      
     </div>
 </div>
 
