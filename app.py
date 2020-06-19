@@ -275,12 +275,24 @@ def THreshhold():
     return de
 
 
+class my_dictionary(dict): 
+  
+    # __init__ function 
+    def __init__(self): 
+        self = dict() 
+          
+    # Function to add key:value 
+    def add(self, key, value): 
+        self[key] = value 
+
+
+
 #ML Functions
 
 # findface function
 
 
-def find_faces(image,name):
+def find_faces(image):
 
     dets = detector(image, 1)
     if len(dets) == 0:
@@ -944,7 +956,7 @@ def train():
                 print("Please change image: " + myimages[i] + " - it has " + str(len(detector(image, 1))) + " faces; it can only have one")
                 return redirect(url_for('current'))
 
-            img_shapes = find_faces(image, myimages[i])
+            img_shapes = find_faces(image)
             descs[i] = encode_faces(image, img_shapes)[0]
         if request.form['action'] == 'Request_Video':
 
@@ -1001,8 +1013,6 @@ def train():
 
            
         elif request.form['action'] == "Upload":
-            np.save('train/'+ session["user"]+'.npy', descs)
-            descs = np.load('train/'+session["user"]+'.npy',allow_pickle=True)[()]
             
             videos = request.files.getlist("videos")
             f = videos[0]
@@ -1096,8 +1106,6 @@ def train():
 
 
         elif request.form['action'] == "ON":
-            np.save('train/'+ session["user"] +'.npy', descs)
-            descs = np.load('train/'+ session["user"] +'.npy',allow_pickle=True)[()]
             
             cap = cv2.VideoCapture(0)
             if not cap.isOpened():
@@ -1456,6 +1464,122 @@ def  DeleteCriminal(id):
       return redirect(url_for('relogin'))
 
 
+@app.route('/thirdparty/criminalchecking',methods=['POST'])
+def CriminalChecking():
+
+    if "third" in session:
+
+        if request.method == 'POST':
+
+            if request.form['action'] == "upload":
+
+                file = request.files['video']
+                if not allowed_file2(file.filename):
+                    flash('Invalid Video Format ;Only Mp4 Supported','errorvideo')
+                    print("Invalid Video Format ;Only Mp4 Supported")
+                    return redirect(url_for('thirddashboard'))
+                file.filename = session["third"] + ".mp4"
+                print(file.filename)
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_VIDEO'], filename))
+                video_path = 'video/'+ file.filename
+                print(video_path)
+
+            if request.form['action'] == "real":
+
+                video_path = 0
+                
+            third = Third.query.filter_by(usr_name = session["third"]).first()
+            thirdpartyid = third.third_party_id
+
+            crimini = Criminals.query.filter_by(third_party_id = thirdpartyid).all()
+            print(len(crimini))
+
+            img_paths = my_dictionary() 
+            descs = my_dictionary()
+
+            for user in crimini:
+                img_paths.add(user.name,'static/criminals/'+ user.url)
+                descs.add(user.name, None)
+            
+            print(img_paths)
+            print(descs)
+
+            for name, img_path in img_paths.items():
+                img_bgr = cv2.imread(img_path)
+                img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+
+                img_shapes = find_faces(img_rgb)
+                descs[name] = encode_faces(img_rgb, img_shapes)[0]
+            
+            print(descs)
+            
+            cap = cv2.VideoCapture(video_path)
+            if not cap.isOpened():
+                flash('Camera is not working','errorcamera')
+                print("Camera is not working")
+                return redirect(url_for('thirddashboard'))
+        
+            _, img_bgr = cap.read()
+            padding_size = 0
+            resized_width = 500
+            video_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1]))
+            output_size = (resized_width, int(img_bgr.shape[0] * resized_width // img_bgr.shape[1] + padding_size * 2))
+
+            fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            writer = cv2.VideoWriter('static/result/'+session["third"]+'.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), output_size)
+       
+            th = THreshhold()
+            while True:
+                        
+                ret, img_bgr = cap.read()
+                if not ret:
+                    break
+
+                img_bgr = cv2.resize(img_bgr, video_size)
+                img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+                dets = detector(img_bgr, 1)
+
+                for k, d in enumerate(dets):
+                    shape = sp(img_rgb, d)
+                    face_descriptor = facerec.compute_face_descriptor(img_rgb, shape)
+
+                    last_found = {'name': 'unknown', 'dist': th, 'color': (0,0,255),'percent': 0}
+
+                    for name, saved_desc in descs.items():
+                        dist = np.linalg.norm([face_descriptor] - saved_desc, axis=1)
+
+                        if dist < last_found['dist']:
+                            perce = (1-dist)*100
+                            last_found = {'name': name, 'dist': dist, 'color': (255,255,255), 'percent': perce}
+                            
+                                    
+                    cv2.rectangle(img_bgr, pt1=(d.left(), d.top()), pt2=(d.right(), d.bottom()), color=last_found['color'], thickness=2)
+                    cv2.putText(img_bgr, last_found['name'] + " (" + str(last_found['percent']) + "%)" , org=(d.left(), d.top()), fontFace=cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale=1, color=last_found['color'], thickness=3)
+
+                writer.write(img_bgr)
+                if request.form['action'] == "real":
+                    cv2.imshow('img', img_bgr)
+                    if cv2.waitKey(1) == ord('q'):
+                        break
+                    
+                
+            cap.release()
+            writer.release()
+
+            flash('Successfully Processed video','successcriminal')
+            return redirect(url_for('thirddashboard'))
+
+        
+    else:
+      return redirect(url_for('relogin'))
+
+@app.route('/thirdparty/result/criminal')
+def criminaldownload():
+    if "third" in session:
+        return send_from_directory(directory='static/result', filename=session["third"] + '.mp4')
+    else:
+      return redirect(url_for('relogin'))
 
 
 
@@ -1561,11 +1685,9 @@ def  reatimevideo1():
                 print("Please change image: " + myimages[i] + " - it has " + str(len(detector(image, 1))) + " faces; it can only have one")
                 return redirect(url_for('thirddashboard'))
 
-            img_shapes = find_faces(image,myimages[i])
+            img_shapes = find_faces(image)
             descs[i] = encode_faces(image, img_shapes)[0]
         
-        np.save('train/descs.npy', descs)
-        descs = np.load('train/descs.npy',allow_pickle=True)[()]
             
         cap = cv2.VideoCapture(0)
         if not cap.isOpened():

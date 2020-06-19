@@ -114,6 +114,20 @@
       </script>
       {% endif %}
 
+
+      {% if category =='successcriminal' %}
+      <div id ="message10" class="alert alert-success mb-3" style="max-width: 700px;" role="alert">
+        {{message}} <br>
+     </div>
+     <div style="text-align: center;">
+       <p style = "color:white">You can download video from here <a href="/thirdparty/result/criminal" download class="btn btn-primary">Click here</a></p>
+     </div>
+     <script>
+      window.setTimeout("document.getElementById('message10').style.display='none';",5000);
+    
+    </script>
+    {% endif %}
+
       {% if category =='successcrowd' %}
 
 <style type="text/css">
@@ -505,10 +519,13 @@
 
 
 
-    <br><br><br><br><br>
+    <br><br><br>
     <div class="text-center">
 
-      <form method="POST" action="" enctype="multipart/form-data">
+      <form method="POST" action="/thirdparty/criminalchecking" enctype="multipart/form-data">
+        <div class="form-control row">
+          <input type="file" accept=".mp4" name= "video">
+        </div><br><br>
         <button  class="btn btn-primary" type="submit" name="action" value="real"> Realtime video Check</button>
         <button  class="btn btn-primary" type="submit" name="action" value="upload">Upload video</button>
         </form>
