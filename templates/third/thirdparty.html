@@ -117,6 +117,7 @@
       {% if category =='successcrowd' %}
 
 <style type="text/css">
+
 .modal-confirm {		
 		color: #434e65;
 		width: 525px;
@@ -174,6 +175,7 @@
 	.modal-confirm.modal-dialog {
 		margin-top: 80px;
 	}
+	
 </style>
       <div id="myModal">
         <div class="modal-dialog modal-confirm">
@@ -277,6 +279,7 @@
                       </tr>
     
             <!-- Modal Edit user-->
+
 
 <div id="modaledit{{user.id}}" class="modal fade"  role="dialog">
 <div id="co"  style="color: black;">
@@ -411,6 +414,8 @@
           document.getElementById("addcriminal").style.display='none'
         }
 </script>
+
+
 <div  id="criminal" style="display: none; margin-top: 100px;">
   <div class="card-header card-header-primary">
     <h4 class="card-title">Criminal Detections</h4>
@@ -444,7 +449,7 @@
             <td>{{user.id}}</td>
             <td>{{user.name}}</td> 
             <td>{{user.age}}</td> 
-            <td><button href="" id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="modaledit{{user.id}}">View</button></td>
+            <td><button href="" id="view" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user.id}}">View</button></td>
             <td><a href="/thirdparty/deletecriminal/{{user.id}}"  class="btn btn-warning btn-xs">Delete</a></td>
           </tr>
           <div id="modaledit{{user.id}}" class="modal fade"  role="dialog">
@@ -455,7 +460,16 @@
                     <h4 class="modal-title">Image</h4>
                   </div>
                   <div class="modal-body">
-                    <img src="{{ url_for('static',filename = 'criminals/'+ user.url)}}">
+                    <div  style="text-align:center;">     
+                      <img src="{{ url_for('static',filename = 'criminals/'+ user.url)}}" style="width:128px;height:128px;text-align:center;display:block;margin-left: auto;margin-right: auto;" alt="Criminal" >
+ 
+                        Name : {{user.name}}
+                    </div>
+                    <div class="form-group">
+                        <label  style= "color:#343a40"  >Age: {{ user.age }} </label>
+       
+                    </div>
+                  </div> 
                     <div class="modal-footer">
                        <button type="button" id = "close" class="btn btn-secondary" data-dismiss="modal">close</button>
                     </div>
@@ -467,9 +481,12 @@
           {% endfor %}
         </table>
         {% endif %}
-        <button class="btn btn-secondary" onclick="AddCriminal();">Add New Criminal</button>
-        <br><br><br>
+        <button type="button" class= "btn btn-success" onclick="AddCriminal();"> (+) Add New Criminal</button>
+    
+     
         <div id="addcriminal" style="display: none;">
+
+          <br><br>
           <form action="/thirdparty/addcriminal" method="POST" enctype="multipart/form-data">
             <div class="form-control row">
               <input type="file" accept=".jpg ,.jpeg" name= "inputcriminal" required>
@@ -477,6 +494,7 @@
               <input type ="text" placeholder="Enter the name" name="name" required>&nbsp;&nbsp;
               <input type = "text" placeholder="Enter the Age" name="age" required>
               <br><br>
+          
               <button type="submit" class="btn btn-secondary">Submit</button>
               <button type="reset" class="btn btn-danger" onclick="CloseAdd();">Close</button>
             </div>
@@ -484,11 +502,20 @@
         </div>
       </div>
       
+
+
+
+    <br><br><br><br><br>
+    <div class="text-center">
+
+      <form method="POST" action="" enctype="multipart/form-data">
+        <button  class="btn btn-primary" type="submit" name="action" value="real"> Realtime video Check</button>
+        <button  class="btn btn-primary" type="submit" name="action" value="upload">Upload video</button>
+        </form>
     </div>
-</div>
+</div></div>
 
 
-  
 {% endblock %}
 
 
