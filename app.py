@@ -16,11 +16,6 @@ import os
 import hashlib
 from flask.helpers import flash, get_flashed_messages, send_from_directory
 from datetime import timedelta
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3aa0ee2aae1db7ed269abfcb3c72b127cc9b0192
 # seed random number generator
 seed(1)
 # generate some integers
