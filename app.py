@@ -68,6 +68,7 @@ app.secret_key = "hello"
 detector = dlib.get_frontal_face_detector()
 sp = dlib.shape_predictor('models/shape_predictor_68_face_landmarks.dat')
 facerec = dlib.face_recognition_model_v1('models/dlib_face_recognition_resnet_model_v1.dat')
+detector2 = dlib.simple_object_detector('models/detector.svm')
 #end
 
 #database models
@@ -1624,6 +1625,65 @@ def  PendingUser():
 
     else:
       return redirect(url_for('relogin'))
+
+
+
+
+
+@app.route('/thirdparty/maskdetection')
+def Maskdetection():
+  
+    if "third" in session:
+        
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            flash('Camera is not working','errorcamera')
+            print("Camera is not working")
+            return redirect(url_for('thirddashboard'))
+        
+       
+        while True:
+                        
+            ret, img1 = cap.read()
+            if not ret:
+                break
+            
+            dets = detector2(img1)
+            print("Number of objects detected: {}".format(len(dets)))
+            h = True
+            for k, d in enumerate(dets):
+                h = False
+                cv2.rectangle(img1, pt1=(d.left(), d.top()), pt2=(d.right(), d.bottom()),color=(0, 255, 0), thickness=2)
+                cv2.putText(img1, "With Mask", org=(d.left(), d.top()), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 255, 200), thickness=2)
+                print("found")
+                h = True
+            # Save the image detections to a file for future review.
+            if h == True:
+                detq = detector(img1, 1)
+                for k, d in enumerate(detq):
+                    cv2.rectangle(img1, pt1=(d.left(), d.top()), pt2=(d.right(), d.bottom()),color=(0,0,255), thickness=2)
+                    cv2.putText(img1, " Without Mask", org=(d.left(), d.top()), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0,0,255), thickness=2)
+
+                
+
+            cv2.imshow("frame",img1)
+            if cv2.waitKey(1) == ord('q'):
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
+        flash("You have successfully processed ",'success2')
+        return redirect(url_for('thirddashboard'))
+
+
+    else:
+      return redirect(url_for('relogin'))
+
+
+
+
+
+
 
             
 @app.route('/thirdparty/realtimevideo',methods=['POST'])
