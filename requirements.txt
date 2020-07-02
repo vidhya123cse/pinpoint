@@ -51,5 +51,5 @@ Werkzeug==1.0.1
 WTForms==2.3.1
 certifi==0.0.8
 chardet==1.0.1
-gunicorn==0.14.2
+gunicorn==19.5.0
 
