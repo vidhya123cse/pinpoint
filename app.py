@@ -356,7 +356,7 @@ def allowed_file3(filename):
 #INdex page
 
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def index():
 
     value = Count.query.filter_by(id = 1).first()
